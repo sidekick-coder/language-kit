@@ -1,0 +1,25 @@
+{
+  "name": "@language-kit/markdown",
+  "version": "0.0.1",
+  "description": "Parser and process markdown strings",
+  "keywords": [
+    "markdown",
+    "parser"
+  ],
+  "author": "Henrique Oliveira <henriqueoliwork@gmail.com>",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "test": "vitest",
+    "build": "tsup"
+  },
+  "dependencies": {
+    "@language-kit/lexer": "^0.0.1"
+  }
+}

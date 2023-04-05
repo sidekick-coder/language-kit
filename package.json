@@ -4,7 +4,7 @@
   "private": true,
   "description": "Set of tools to parse and process custom languages",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm test -ws --if-present"
   },
   "author": "Henrique Oliveira",
   "license": "MIT",

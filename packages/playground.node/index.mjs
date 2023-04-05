@@ -1,11 +1,16 @@
-import { Lexer, Token, allProcessors } from '@language-kit/lexer'
+console.log('Hello from the playground.node package')
 
-const lexer = new Lexer()
 
-const tokens = lexer.tokenize('1 + 2')
+async function run() {
 
-console.log(tokens)
+    const files = ['lexer.mjs', 'markdown.mjs']
 
-console.log(allProcessors)
+    for await (const file of files) {
+        console.log(`-------------------- ${file} --------------------`)
+        
+        await import(`./${file}`)
+    }
 
-console.log(Token.fromSymbol('@'))
+}
+
+run()
