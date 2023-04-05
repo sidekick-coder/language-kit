@@ -1,0 +1,10 @@
+{
+  "include": ["*.ts"],
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "ESNext",
+    "moduleResolution": "nodenext",
+    "skipLibCheck": true,
+    "esModuleInterop": true
+  },
+}
