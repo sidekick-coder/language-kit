@@ -1,24 +1,23 @@
 {
   "name": "@language-kit/lexer",
   "version": "0.0.1",
-  "description": "",
+  "description": "Transforms a string into a list of tokens",
+  "keywords": [
+    "lexer",
+    "tokenizer",
+    "language"
+  ],
+  "author": "Henrique Oliveira <henriqueoliwork@gmail.com>",
+  "license": "MIT",
   "exports": {
     ".": {
-      "import": "./dist/Lexer.mjs",
-      "require": "./dist/Lexer.js",
-      "types": "./dist/Lexer.d.ts"
-    },
-    "./processors": {
-      "import": "./dist/processors.mjs",
-      "require": "./dist/processors.js",
-      "types": "./dist/processors.d.ts"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     }
   },
   "scripts": {
     "test": "vitest",
     "build": "tsup"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  }
 }

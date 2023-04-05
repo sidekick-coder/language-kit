@@ -1,10 +1,10 @@
-import type LexerProcessor from './LexerProcessor'
-import Token, { TokenType } from './Token'
+import type { LexerProcessor } from './LexerProcessor'
+import { Token,  TokenType } from './Token'
 
-import { all as processors } from './processors'
+import { allProcessors } from './Processors'
 
-export default class Lexer {
-  public processors: LexerProcessor[] = processors
+export class Lexer {
+  public processors: LexerProcessor[] = allProcessors
 
   public isAlpha(char: string) {
     return /[a-zA-Z0-9?]/.test(char)

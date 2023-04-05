@@ -1,5 +1,5 @@
-import type LexerProcessor from '../LexerProcessor'
-import Token, { TokenType } from '../Token'
+import type { LexerProcessor } from '../LexerProcessor'
+import { Token, TokenType } from '../Token'
 
 export default class SymbolProcessor implements LexerProcessor {
   public order = 80

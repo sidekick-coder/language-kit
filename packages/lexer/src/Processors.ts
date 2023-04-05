@@ -8,7 +8,7 @@ export const symbolProcessor = new SymbolProcessor()
 export const whiteSpaceProcessor = new WhiteSpaceProcessor()
 export const wordProcessor = new WordProcessor()
 
-export const all = [
+export const allProcessors = [
     breakLineProcessor,
     symbolProcessor,
     whiteSpaceProcessor,

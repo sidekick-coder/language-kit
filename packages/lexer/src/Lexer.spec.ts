@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import Lexer from '../src/Lexer'
+import { Lexer } from '../src/Lexer'
 
 describe('lexer', () => {
   const lexer = new Lexer()

@@ -8,7 +8,7 @@ export enum TokenType {
 }
 
 // TODO: add startIndex and endIndex
-export default class Token {
+export class Token {
   public type: TokenType
   public value: string
 

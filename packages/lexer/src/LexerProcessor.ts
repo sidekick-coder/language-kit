@@ -1,6 +1,6 @@
-import type Token from './Token'
+import type { Token } from './Token'
 
-export default interface LexerProcessor {
+export interface LexerProcessor {
   order: number
   process: (char: string, chars: string[], tokens: Token[]) => boolean
 }
