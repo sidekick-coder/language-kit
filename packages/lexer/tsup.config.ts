@@ -12,5 +12,6 @@ export default defineConfig({
     sourcemap: true,
     clean: true,
     dts: true,
-    tsconfig: path.resolve(__dirname, '..', '..', 'tsconfig.json'),
+    format: ['esm', 'cjs'],
+    tsconfig: path.resolve(__dirname, 'tsconfig.json'),
 })
