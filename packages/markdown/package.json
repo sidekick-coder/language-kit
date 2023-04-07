@@ -17,7 +17,8 @@
   },
   "scripts": {
     "test": "vitest",
-    "build": "tsup"
+    "build": "tsup",
+    "dev": "tsup --watch"
   },
   "dependencies": {
     "@language-kit/lexer": "^0.0.1"

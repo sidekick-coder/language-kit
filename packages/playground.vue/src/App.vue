@@ -30,7 +30,7 @@ watch(
 <template>
   <div class="h-screen w-screen flex overflow-hidden">
     <div class="w-6/12 bg-gray-800 text-white">
-      <div class="text-2xl font-bold px-8 py-4 flex">
+      <div class="text-2xl font-bold px-8 py-4 flex bg-gray-900">
         Text
 
         <select v-model="selected" class="ml-auto text-gray-500 text-xs">
@@ -46,7 +46,7 @@ watch(
     </div>
 
     <div class="w-6/12 bg-gray-800 text-white border-l">
-      <div class="text-2xl font-bold px-8 py-4">Vue components</div>
+      <div class="text-2xl font-bold px-8 py-4 bg-gray-900">Vue components</div>
 
       <div class="h-[calc(100%_-_64px)]">
         <MDEditor />

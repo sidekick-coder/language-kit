@@ -5,6 +5,7 @@ import { Token } from '@language-kit/lexer'
 import { Parser } from './Parser'
 import { Node, NodeType } from './Node'
 import { useFixturesFiles } from './tests/helpers'
+import { MarkdownToken, MarkdownTokenType } from './MarkdownToken'
 
 describe('markdown parser', () => {
   const parser = new Parser()
@@ -21,12 +22,12 @@ describe('markdown parser', () => {
     mdNode.type = NodeType.Heading
 
     mdNode.tokens = [
-      Token.fromSymbol('#'),
-      Token.fromWhiteSpace(' '),
-      Token.fromWord('Hello'),
-      Token.fromWhiteSpace(' '),
-      Token.fromWord('world'),
-      Token.fromEndOfFile()
+      Token.symbol('#'),
+      Token.whiteSpace(' '),
+      Token.word('Hello'),
+      Token.whiteSpace(' '),
+      Token.word('world'),
+      Token.endOfFile()
     ]
 
     expect(nodes).toEqual([mdNode])
@@ -41,23 +42,23 @@ describe('markdown parser', () => {
       new Node({
         type: NodeType.Paragraph,
         tokens: [
-          Token.fromWord('Paragraph'),
-          Token.fromWhiteSpace(' '),
-          Token.fromWord('1'),
-          Token.fromBreakLine()
+          Token.word('Paragraph'),
+          Token.whiteSpace(' '),
+          Token.word('1'),
+          Token.breakLine()
         ]
       }),
       new Node({
         type: NodeType.Paragraph,
-        tokens: [Token.fromBreakLine()]
+        tokens: [Token.breakLine()]
       }),
       new Node({
         type: NodeType.Paragraph,
         tokens: [
-          Token.fromWord('Paragraph'),
-          Token.fromWhiteSpace(' '),
-          Token.fromWord('2'),
-          Token.fromEndOfFile()
+          Token.word('Paragraph'),
+          Token.whiteSpace(' '),
+          Token.word('2'),
+          Token.endOfFile()
         ]
       })
     ]
@@ -75,30 +76,60 @@ describe('markdown parser', () => {
     })
 
     exepected.tokens = [
-      Token.fromSymbol(':'),
-      Token.fromSymbol(':'),
-      Token.fromWhiteSpace(' '),
-      Token.fromWord('v'),
-      Token.fromSymbol('-'),
-      Token.fromWord('btn'),
-      Token.fromBreakLine(),
-      Token.fromBreakLine(),
-      Token.fromWhiteSpace('    '),
-      Token.fromSymbol('#'),
-      Token.fromWord('label'),
-      Token.fromSymbol('='),
-      Token.fromWord('Hello'),
-      Token.fromSymbol('-'),
-      Token.fromWord('word'),
-      Token.fromEndOfFile()
+      Token.symbol(':'),
+      Token.symbol(':'),
+      Token.whiteSpace(' '),
+      Token.word('v'),
+      Token.symbol('-'),
+      Token.word('btn'),
+      Token.breakLine(),
+      Token.breakLine(),
+      Token.whiteSpace('    '),
+      Token.symbol('#'),
+      Token.word('label'),
+      Token.symbol('='),
+      Token.word('Hello'),
+      Token.symbol('-'),
+      Token.word('word'),
+      Token.endOfFile()
     ]
 
     expect(nodes).toEqual([exepected])
   })
 
+  it('should transform tokens to markdown tokens', () => {
+    const payload = 'This is a **bold text** \n\n'
+
+    const tokens = parser.toTokens(payload)
+
+    const markdownTokens = parser.toMarkdownTokens(tokens)
+
+    const exepected = [
+      MarkdownToken.word('This'),
+      MarkdownToken.whiteSpace(' '),
+      MarkdownToken.word('is'),
+      MarkdownToken.whiteSpace(' '),
+      MarkdownToken.word('a'),
+      MarkdownToken.whiteSpace(' '),
+      MarkdownToken.from({
+        type: MarkdownTokenType.BoldText,
+        value: '**bold text**',
+        data: {
+          text: 'bold text'
+        }
+      }),
+      MarkdownToken.whiteSpace(' '),
+      MarkdownToken.breakLine(),
+      MarkdownToken.breakLine(),
+      MarkdownToken.endOfFile()
+    ]
+
+    expect(markdownTokens).toEqual(exepected)
+  })
+
   it.each(files)('should fixutre $name be converted from nodes to text', (file) => {
     const nodes = parser.toNodes(file.content)
 
-    // expect(parser.toText(nodes)).toBe(file.content)
+    expect(parser.toText(nodes)).toBe(file.content)
   })
 })

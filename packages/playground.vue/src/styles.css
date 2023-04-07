@@ -35,6 +35,5 @@ html {
 }
 
 body {
-    @apply text-gray-800;
     font-family: 'Roboto', sans-serif;
 }

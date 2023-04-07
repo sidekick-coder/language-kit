@@ -16,7 +16,7 @@ export default class ParagraphProcessor extends BaseProcessor {
 
     this.addNode({ type: NodeType.Paragraph, tokens: allTokens })
 
-    this.removeTokens(0, endIndex + 1)
+    this.removeTokens(0, allTokens.length)
 
     return true
   }

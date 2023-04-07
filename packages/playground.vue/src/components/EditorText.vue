@@ -10,5 +10,5 @@ const text = computed({
 })
 </script>
 <template>
-  <textarea class="w-full h-full p-4 bg-black text-white focus:outline-none" v-model="text" />
+  <textarea class="w-full h-full p-4 bg-gray-950 text-white focus:outline-none" v-model="text" />
 </template>
