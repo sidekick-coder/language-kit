@@ -1,7 +1,7 @@
-import BreakLineProcessor from "./processors/break-line";
-import SymbolProcessor from "./processors/symbol";
-import WhiteSpaceProcessor from "./processors/white-space";
-import WordProcessor from "./processors/word";
+import BreakLineProcessor from './processors/break-line'
+import SymbolProcessor from './processors/symbol'
+import WhiteSpaceProcessor from './processors/white-space'
+import WordProcessor from './processors/word'
 
 export const breakLineProcessor = new BreakLineProcessor()
 export const symbolProcessor = new SymbolProcessor()
@@ -12,5 +12,5 @@ export const allProcessors = [
     breakLineProcessor,
     symbolProcessor,
     whiteSpaceProcessor,
-    wordProcessor
+    wordProcessor,
 ]

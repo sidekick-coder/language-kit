@@ -1,6 +1,6 @@
-import { TokenType } from "@language-kit/lexer"
+import { TokenType } from '@language-kit/lexer'
 
-export enum MarkdownTokenType  {
+export enum MarkdownTokenType {
     BoldText = 'BoldText',
 }
 
@@ -16,39 +16,39 @@ export class MarkdownToken {
     public static from(props: Partial<MarkdownToken>) {
         return new MarkdownToken(props)
     }
-    
+
     public static symbol(value: string) {
         return new MarkdownToken({
             type: TokenType.Symbol,
-            value
+            value,
         })
     }
 
     public static word(value: string) {
         return new MarkdownToken({
             type: TokenType.Word,
-            value
+            value,
         })
     }
 
     public static whiteSpace(value: string) {
         return new MarkdownToken({
             type: TokenType.WhiteSpace,
-            value
+            value,
         })
     }
 
     public static breakLine() {
         return new MarkdownToken({
             type: TokenType.BreakLine,
-            value: '\n'
+            value: '\n',
         })
     }
 
     public static endOfFile() {
         return new MarkdownToken({
             type: TokenType.EndOfFile,
-            value: ''
+            value: '',
         })
     }
 }

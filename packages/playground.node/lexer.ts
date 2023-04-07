@@ -4,8 +4,8 @@ const lexer = new Lexer()
 
 const tokens = lexer.tokenize('1 + 2')
 
-console.log(tokens)
+console.debug(tokens)
 
-console.log(allProcessors)
+console.debug(allProcessors)
 
-console.log(Token.fromSymbol('@'))
+console.debug(Token.symbol('@'))

@@ -5,10 +5,10 @@ import { computed } from 'vue'
 const editor = useEditor()
 
 const text = computed({
-  get: () => editor.toText(),
-  set: (value) => editor.updateFromText(value)
+    get: () => editor.toText(),
+    set: (value) => editor.updateFromText(value),
 })
 </script>
 <template>
-  <textarea class="w-full h-full p-4 bg-gray-950 text-white focus:outline-none" v-model="text" />
+    <textarea v-model="text" class="w-full h-full p-4 bg-gray-950 text-white focus:outline-none" />
 </template>

@@ -9,8 +9,8 @@ import './styles.css'
 
 const app = createApp(App)
 
-app.component('list-item', ListItemVue)
-app.component('i-drag', IDrag)
-app.component('v-btn', VBtn)
+app.component('ListItem', ListItemVue)
+app.component('IDrag', IDrag)
+app.component('VBtn', VBtn)
 
 app.mount('#app')

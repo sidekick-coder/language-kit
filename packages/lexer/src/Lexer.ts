@@ -1,32 +1,32 @@
 import type { LexerProcessor } from './LexerProcessor'
-import { Token,  TokenType } from './Token'
+import { Token, TokenType } from './Token'
 
 import { allProcessors } from './Processors'
 
 export class Lexer {
-  public processors: LexerProcessor[] = allProcessors
+    public processors: LexerProcessor[] = allProcessors
 
-  public tokenize(code: string) {
-    const tokens: Token[] = []
+    public tokenize(code: string) {
+        const tokens: Token[] = []
 
-    const chars = code.split('')
+        const chars = code.split('')
 
-    while (chars.length) {
-      const current = chars[0]
+        while (chars.length) {
+            const current = chars[0]
 
-      this.processors.sort((a, b) => a.order - b.order)
+            this.processors.sort((a, b) => a.order - b.order)
 
-      const result = this.processors.find((p) => p.process(current, chars, tokens))
+            const result = this.processors.find((p) => p.process(current, chars, tokens))
 
-      if (result) continue
+            if (result) continue
 
-      console.log('[lexer] unhandled char', current)
+            console.debug('[@language-kit/lexer] unhandled char', current)
 
-      chars.shift()
+            chars.shift()
+        }
+
+        tokens.push(Token.from(TokenType.EndOfFile, ''))
+
+        return tokens
     }
-
-    tokens.push(Token.from(TokenType.EndOfFile, ''))
-
-    return tokens
-  }
 }

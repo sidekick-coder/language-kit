@@ -4,58 +4,58 @@ import type { Node } from '@language-kit/markdown'
 import { inject, provide, reactive, ref } from 'vue'
 
 interface Editor {
-  nodes: Node[]
-  parser: Parser
-  toTokens(payload: string): Token[]
-  toText(): string
-  updateFromText(payload: string): void
-  updateFromNodes(payload: Node[]): void
+    nodes: Node[]
+    parser: Parser
+    toTokens(payload: string): Token[]
+    toText(): string
+    updateFromText(payload: string): void
+    updateFromNodes(payload: Node[]): void
 }
 
 export function createEditor(): Editor {
-  const nodes = ref<Node[]>([])
-  const parser = new Parser()
+    const nodes = ref<Node[]>([])
+    const parser = new Parser()
 
-  function toTokens(payload: string) {
-    const tokens = parser.toTokens(payload)
+    function toTokens(payload: string) {
+        const tokens = parser.toTokens(payload)
 
-    // remove eof
-    tokens.pop()
+        // remove eof
+        tokens.pop()
 
-    return tokens
-  }
+        return tokens
+    }
 
-  function toText() {
-    return nodes.value.map((n) => n.toText()).join('')
-  }
+    function toText() {
+        return nodes.value.map((n) => n.toText()).join('')
+    }
 
-  function updateFromText(payload: string) {
-    nodes.value = parser.toNodes(payload)
-  }
+    function updateFromText(payload: string) {
+        nodes.value = parser.toNodes(payload)
+    }
 
-  function updateFromNodes(payload: Node[]) {
-    nodes.value = payload
-  }
+    function updateFromNodes(payload: Node[]) {
+        nodes.value = payload
+    }
 
-  return reactive({
-    nodes,
-    parser,
+    return reactive({
+        nodes,
+        parser,
 
-    toText,
-    toTokens,
-    updateFromText,
-    updateFromNodes
-  }) as Editor
+        toText,
+        toTokens,
+        updateFromText,
+        updateFromNodes,
+    }) as Editor
 }
 
 export function useEditor() {
-  return inject('editor', createEditor())
+    return inject('editor', createEditor())
 }
 
 export function provideEditor() {
-  const editor = createEditor()
+    const editor = createEditor()
 
-  provide('editor', editor)
+    provide('editor', editor)
 
-  return editor
+    return editor
 }

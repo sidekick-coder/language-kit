@@ -13,81 +13,79 @@ import { MarkdownTokenProcessor } from './MarkdownTokenProcessor'
 import { MarkdownToken } from './MarkdownToken'
 
 export class Parser {
-  private lexer = new Lexer()
-  private processors: BaseProcessor[] = [
-    new HeadingProcessor(),
-    new ParagraphProcessor(),
-    new ComponentProcessor()
-  ]
-  
-  private markdowTokenProcessors: MarkdownTokenProcessor[] = [
-    new MarkdownTokenProcessorBold()
-  ]
+    private lexer = new Lexer()
+    private processors: BaseProcessor[] = [
+        new HeadingProcessor(),
+        new ParagraphProcessor(),
+        new ComponentProcessor(),
+    ]
 
-  constructor() {
-    this.processors.sort((a, b) => a.order - b.order)
-    this.markdowTokenProcessors.sort((a, b) => a.order - b.order)
-  }
+    private markdowTokenProcessors: MarkdownTokenProcessor[] = [new MarkdownTokenProcessorBold()]
 
-  public toNodes(value: string) {
-    let tokens = this.lexer.tokenize(value)
-    let nodes: Node[] = []
-
-    while (tokens.length) {
-      const result = this.processors.find((p) => {
-        p.tokens = tokens
-        p.nodes = nodes
-
-        const test = p.process()
-
-        tokens = p.tokens
-        nodes = p.nodes
-
-        return test
-      })
-
-      if (result) continue
-
-      console.log('[md-parser] unhandled token', tokens[0])
-
-      tokens.shift()
+    constructor() {
+        this.processors.sort((a, b) => a.order - b.order)
+        this.markdowTokenProcessors.sort((a, b) => a.order - b.order)
     }
 
-    return nodes
-  }
+    public toNodes(value: string) {
+        let tokens = this.lexer.tokenize(value)
+        let nodes: Node[] = []
 
-  public toMarkdownTokens(payload: Token[]) {
-    let markdownTokens: MarkdownToken[] = []
-    let tokens = payload.slice()
+        while (tokens.length) {
+            const result = this.processors.find((p) => {
+                p.tokens = tokens
+                p.nodes = nodes
 
-    while (tokens.length) {
-      const result = this.markdowTokenProcessors.find((p) => {
-        p.tokens = tokens
-        p.markdownTokens = markdownTokens
+                const test = p.process()
 
-        const test = p.process()
+                tokens = p.tokens
+                nodes = p.nodes
 
-        tokens = p.tokens
-        markdownTokens = p.markdownTokens
+                return test
+            })
 
-        return test
-      })
+            if (result) continue
 
-      if (result) continue
+            console.debug('[@language-kit/markdown] unhandled token', tokens[0])
 
-      markdownTokens.push(MarkdownToken.from(tokens[0]))
+            tokens.shift()
+        }
 
-      tokens.shift()
+        return nodes
     }
 
-    return markdownTokens
-  }
+    public toMarkdownTokens(payload: Token[]) {
+        let markdownTokens: MarkdownToken[] = []
+        let tokens = payload.slice()
 
-  public toTokens(value: string): Token[] {
-    return this.lexer.tokenize(value)
-  }
+        while (tokens.length) {
+            const result = this.markdowTokenProcessors.find((p) => {
+                p.tokens = tokens
+                p.markdownTokens = markdownTokens
 
-  public toText(nodes: Node[]) {
-    return nodes.map((node) => node.toText()).join('')
-  }
+                const test = p.process()
+
+                tokens = p.tokens
+                markdownTokens = p.markdownTokens
+
+                return test
+            })
+
+            if (result) continue
+
+            markdownTokens.push(MarkdownToken.from(tokens[0]))
+
+            tokens.shift()
+        }
+
+        return markdownTokens
+    }
+
+    public toTokens(value: string): Token[] {
+        return this.lexer.tokenize(value)
+    }
+
+    public toText(nodes: Node[]) {
+        return nodes.map((node) => node.toText()).join('')
+    }
 }

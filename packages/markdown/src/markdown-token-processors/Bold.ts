@@ -1,5 +1,5 @@
-import { MarkdownTokenProcessor } from "../MarkdownTokenProcessor";
-import { MarkdownToken, MarkdownTokenType } from "../MarkdownToken";
+import { MarkdownTokenProcessor } from '../MarkdownTokenProcessor'
+import { MarkdownToken, MarkdownTokenType } from '../MarkdownToken'
 
 export default class MarkdownTokenProcessorBold extends MarkdownTokenProcessor {
     public order = 10
@@ -17,7 +17,6 @@ export default class MarkdownTokenProcessorBold extends MarkdownTokenProcessor {
     }
 
     public process: MarkdownTokenProcessor['process'] = () => {
-
         const [first, second] = this.tokens
 
         if (first.value !== '*' || second.value !== '*') return false
@@ -32,8 +31,11 @@ export default class MarkdownTokenProcessorBold extends MarkdownTokenProcessor {
             type: MarkdownTokenType.BoldText,
             value: tokens.map((t) => t.value).join(''),
             data: {
-                text: tokens.slice(2, -2).map((t) => t.value).join('')
-            }
+                text: tokens
+                    .slice(2, -2)
+                    .map((t) => t.value)
+                    .join(''),
+            },
         })
 
         this.markdownTokens.push(markdownToken)
