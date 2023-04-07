@@ -21,23 +21,23 @@ export class Token {
     return new Token({ type, value })
   }
 
-  public static fromSymbol(value: string) {
+  public static symbol(value: string) {
     return Token.from(TokenType.Symbol, value)
   }
 
-  public static fromWord(value: string) {
+  public static word(value: string) {
     return Token.from(TokenType.Word, value)
   }
 
-  public static fromWhiteSpace(value = ' ') {
+  public static whiteSpace(value = ' ') {
     return Token.from(TokenType.WhiteSpace, value)
   }
 
-  public static fromBreakLine() {
+  public static breakLine() {
     return Token.from(TokenType.BreakLine, '\n')
   }
 
-  public static fromEndOfFile() {
+  public static endOfFile() {
     return Token.from(TokenType.EndOfFile, '')
   }
 }

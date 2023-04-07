@@ -6,18 +6,6 @@ import { allProcessors } from './Processors'
 export class Lexer {
   public processors: LexerProcessor[] = allProcessors
 
-  public isAlpha(char: string) {
-    return /[a-zA-Z0-9?]/.test(char)
-  }
-
-  public isWhitespace(char: string) {
-    return /\s/.test(char)
-  }
-
-  public isText(char: string) {
-    return this.isAlpha(char) || this.isWhitespace(char)
-  }
-
   public tokenize(code: string) {
     const tokens: Token[] = []
 
