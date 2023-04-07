@@ -26,6 +26,8 @@ const text = ref('')
 function load() {
     const mdTokens = editor.parser.toMarkdownTokens(model.value.tokens)
 
+    // console.log(mdTokens)
+
     const content = mdTokens.map((token) => {
         if (token.type === MarkdownTokenType.BoldText) {
             return `<b>${token.data.text}</b>`
@@ -33,6 +35,10 @@ function load() {
 
         if (token.type === MarkdownTokenType.ItalicText) {
             return `<i>${token.data.text}</i>`
+        }
+
+        if (token.type === MarkdownTokenType.ItalicAndBoldText) {
+            return `<i><b>${token.data.text}</b></i>`
         }
 
         return token.value

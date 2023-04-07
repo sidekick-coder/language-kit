@@ -3,6 +3,7 @@ import { TokenType } from '@language-kit/lexer'
 export enum MarkdownTokenType {
     BoldText = 'BoldText',
     ItalicText = 'ItalicText',
+    ItalicAndBoldText = 'ItalicAndBoldText',
 }
 
 export class MarkdownToken {

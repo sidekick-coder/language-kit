@@ -18,3 +18,7 @@ This is **another** **bold text**
 This is a *italic text*
 
 This is *another* *italic text*
+
+# Italic + Bold
+
+This text is ***Italic and bold text***.

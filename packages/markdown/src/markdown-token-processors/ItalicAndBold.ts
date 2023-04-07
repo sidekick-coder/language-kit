@@ -2,18 +2,23 @@ import { MarkdownTokenProcessor } from '../MarkdownTokenProcessor'
 import { MarkdownToken, MarkdownTokenType } from '../MarkdownToken'
 import { TokenType } from '@language-kit/lexer'
 
-export default class MarkdownTokenProcessorBold extends MarkdownTokenProcessor {
-    public order = 20
+export default class MarkdownTokenProcessorITalicAndBold extends MarkdownTokenProcessor {
+    public order = 10
 
     public findEndTokenIndex() {
         return this.tokens.findIndex((current, i) => {
-            if (i < 2) return false
+            if (i < 3) return false
 
             const prev = this.tokens[i - 1]
+            const prevPrev = this.tokens[i - 2]
 
-            if (!prev) return false
+            const isValid = [
+                current.value === '*',
+                prev.value === '*',
+                prevPrev && prevPrev.value === '*',
+            ]
 
-            return prev.value === '*' && current.value === '*'
+            return isValid.every(Boolean)
         })
     }
 
@@ -23,7 +28,7 @@ export default class MarkdownTokenProcessorBold extends MarkdownTokenProcessor {
         const isValid = [
             first.value === '*',
             second && second.value === '*',
-            third && third.type === TokenType.Word,
+            third && third.value === '*',
         ]
 
         if (!isValid.every(Boolean)) return false
@@ -35,11 +40,11 @@ export default class MarkdownTokenProcessorBold extends MarkdownTokenProcessor {
         const tokens = this.tokens.slice(0, endIndex + 1)
 
         const markdownToken = new MarkdownToken({
-            type: MarkdownTokenType.BoldText,
+            type: MarkdownTokenType.ItalicAndBoldText,
             value: tokens.map((t) => t.value).join(''),
             data: {
                 text: tokens
-                    .slice(2, -2)
+                    .slice(3, -3)
                     .map((t) => t.value)
                     .join(''),
             },

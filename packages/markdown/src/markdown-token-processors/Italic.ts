@@ -1,5 +1,6 @@
 import { MarkdownTokenProcessor } from '../MarkdownTokenProcessor'
 import { MarkdownToken, MarkdownTokenType } from '../MarkdownToken'
+import { TokenType } from '@language-kit/lexer'
 
 export default class MarkdownTokenProcessorITalic extends MarkdownTokenProcessor {
     public order = 20
@@ -13,9 +14,11 @@ export default class MarkdownTokenProcessorITalic extends MarkdownTokenProcessor
     }
 
     public process: MarkdownTokenProcessor['process'] = () => {
-        const [first] = this.tokens
+        const [first, second] = this.tokens
 
-        if (first.value !== '*') return false
+        const isValid = [first.value === '*', second && second.type === TokenType.Word]
+
+        if (!isValid.every(Boolean)) return false
 
         const endIndex = this.findEndTokenIndex()
 
