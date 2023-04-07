@@ -22,3 +22,10 @@ This is *another* *italic text*
 # Italic + Bold
 
 This text is ***Italic and bold text***.
+
+# Blokquotes
+
+> This is a blokquote
+
+> This is a **bloquote**
+> > This is a *subquote*

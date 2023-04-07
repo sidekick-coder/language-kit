@@ -13,6 +13,7 @@ import { MarkdownTokenProcessor } from './MarkdownTokenProcessor'
 import { MarkdownToken } from './MarkdownToken'
 import MarkdownTokenProcessorITalic from './markdown-token-processors/Italic'
 import MarkdownTokenProcessorITalicAndBold from './markdown-token-processors/ItalicAndBold'
+import BlockquoteProcessor from './processors/Blockquote'
 
 export class Parser {
     private lexer = new Lexer()
@@ -20,6 +21,7 @@ export class Parser {
         new HeadingProcessor(),
         new ParagraphProcessor(),
         new ComponentProcessor(),
+        new BlockquoteProcessor(),
     ]
 
     private markdowTokenProcessors: MarkdownTokenProcessor[] = [

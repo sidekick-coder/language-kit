@@ -4,6 +4,7 @@ export enum NodeType {
     Paragraph = 'paragraph',
     Heading = 'heading',
     Component = 'component',
+    Blockquote = 'blockquote',
 }
 
 export class Node {

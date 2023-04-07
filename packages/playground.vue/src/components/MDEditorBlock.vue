@@ -6,6 +6,7 @@ import { computed } from 'vue'
 import MDEditorBlockHeading from './MDEditorBlockHeading.vue'
 import MDEditorComponent from './MDEditorComponent.vue'
 import MDEditorBlockParagraph from './MDEditorBlockParagraph.vue'
+import MDEditorBlockQuote from './MDEditorBlockQuote.vue'
 
 const modelValue = defineProp<Node>('modelValue', {
     required: true,
@@ -29,6 +30,8 @@ const model = computed({
         <MDEditorComponent v-else-if="model.type === NodeType.Component" v-model="model" />
 
         <MDEditorBlockParagraph v-else-if="model.type === NodeType.Paragraph" v-model="model" />
+
+        <MDEditorBlockQuote v-else-if="model.type === NodeType.Blockquote" v-model="model" />
 
         <div v-else>Unknown block type: {{ model.type }}</div>
     </div>
