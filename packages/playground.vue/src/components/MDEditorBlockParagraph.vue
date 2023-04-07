@@ -31,6 +31,10 @@ function load() {
             return `<b>${token.data.text}</b>`
         }
 
+        if (token.type === MarkdownTokenType.ItalicText) {
+            return `<i>${token.data.text}</i>`
+        }
+
         return token.value
     })
 
@@ -43,15 +47,17 @@ function update() {
     let content = el.value?.innerHTML || ''
 
     content = content
+        .replace(/&nbsp;/g, ' ')
         .replace(/<b>/g, '**')
-        .replace(/&nbsp;<\/b>/g, '** ')
         .replace(/<\/b>/g, '**')
+        .replace(/<i>/g, '*')
+        .replace(/<\/i>/g, '*')
 
-    const tokens = editor.toTokens(content)
+    const tokens = editor.toTokens(content.trim() + '\n')
 
     const last = model.value.tokens[model.value.tokens.length - 1]
 
-    if (last.type === TokenType.BreakLine || last.type === TokenType.EndOfFile) {
+    if (last.type === TokenType.EndOfFile) {
         tokens.push(last)
     }
 
@@ -110,6 +116,38 @@ function toggleBold() {
     update()
 }
 
+function toggleItalic() {
+    const selection = window.getSelection()
+
+    const text = selection?.toString()
+
+    if (!selection || !text) return
+
+    const range = selection.getRangeAt(0)
+
+    const isItalic = range.startContainer.parentElement?.tagName === 'I'
+
+    if (isItalic) {
+        const italic = range.startContainer.parentElement
+
+        italic.remove()
+
+        range.deleteContents()
+        range.insertNode(document.createTextNode(italic.innerText))
+    }
+
+    if (!isItalic) {
+        const italic = document.createElement('i')
+
+        italic.innerHTML = text
+
+        range.deleteContents()
+        range.insertNode(italic)
+    }
+
+    update()
+}
+
 onClickOutside(el, () => {
     showActions.value = false
 })
@@ -121,6 +159,7 @@ onClickOutside(el, () => {
             class="border p-2 text-xs rounded absolute top-0 left-0 bg-gray-500 mt-[-42px]"
         >
             <v-btn class="bg-gray-600" @click="toggleBold"> Bold </v-btn>
+            <v-btn class="bg-gray-600" @click="toggleItalic"> Italic </v-btn>
         </div>
 
         <p

@@ -12,3 +12,9 @@
 This is a **bold text**
 
 This is **another** **bold text**
+
+# Italic
+
+This is a *italic text*
+
+This is *another* *italic text*

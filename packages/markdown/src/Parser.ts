@@ -11,6 +11,7 @@ import ComponentProcessor from './processors/Component'
 import MarkdownTokenProcessorBold from './markdown-token-processors/Bold'
 import { MarkdownTokenProcessor } from './MarkdownTokenProcessor'
 import { MarkdownToken } from './MarkdownToken'
+import MarkdownTokenProcessorITalic from './markdown-token-processors/Italic'
 
 export class Parser {
     private lexer = new Lexer()
@@ -20,7 +21,10 @@ export class Parser {
         new ComponentProcessor(),
     ]
 
-    private markdowTokenProcessors: MarkdownTokenProcessor[] = [new MarkdownTokenProcessorBold()]
+    private markdowTokenProcessors: MarkdownTokenProcessor[] = [
+        new MarkdownTokenProcessorBold(),
+        new MarkdownTokenProcessorITalic(),
+    ]
 
     constructor() {
         this.processors.sort((a, b) => a.order - b.order)
