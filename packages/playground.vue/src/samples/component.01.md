@@ -1,14 +1,8 @@
-:: script-block
-    import { useBlock } from '#app'
+:: button
+    :label="Hello"
 
-    const block = useBlock()
+:: button
+    :label="Red button"
+    :color="red"
+    :textColor="white"
 
-    const sum = (a , b) => a + b
-
-    console.log('begin sum')
-
-    const result = sum(5, 10)
-
-    block.setText(result)
-
-    console.log('end sum')

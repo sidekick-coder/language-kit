@@ -31,7 +31,7 @@ watch(
     <div class="h-screen w-screen flex overflow-hidden">
         <div class="w-6/12 bg-gray-800 text-white">
             <div class="text-2xl font-bold px-8 py-4 flex bg-gray-900">
-                Text
+                Text <small class="text-xs mt-2 ml-4">(ctrl + enter to render)</small>
 
                 <select v-model="selected" class="ml-auto text-gray-500 text-xs">
                     <option v-for="option in options" :key="option.name" :value="option.name">

@@ -12,10 +12,10 @@ export default class ComponentProcessor extends BaseProcessor {
 
             if (current.type === TokenType.EndOfFile) return true
 
-            if (!prev || !prevPrev) return false
+            if (!prev) return false
 
             // must have 3 break lines to end the component
-            return [prev, current, prevPrev].every((v) => v.type === TokenType.BreakLine)
+            return [prev, current].every((v) => v.type === TokenType.BreakLine)
         })
     }
 

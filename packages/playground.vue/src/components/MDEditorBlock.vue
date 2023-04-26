@@ -7,6 +7,7 @@ import MDEditorBlockHeading from './MDEditorBlockHeading.vue'
 import MDEditorComponent from './MDEditorComponent.vue'
 import MDEditorBlockParagraph from './MDEditorBlockParagraph.vue'
 import MDEditorBlockQuote from './MDEditorBlockQuote.vue'
+import { providePageContext } from '@/composables/page-context'
 
 const modelValue = defineProp<Node>('modelValue', {
     required: true,
@@ -18,10 +19,12 @@ const model = computed({
     get: () => modelValue.value,
     set: (value) => updateModel(value),
 })
+
+const context = providePageContext()
 </script>
 <template>
-    <div v-if="model" class="w-full flex items-center group first:pt-0">
-        <v-btn class="mr-2 opacity-0 group-hover:opacity-100">
+    <div v-if="model" class="relative w-full flex items-center group first:pt-0">
+        <v-btn class="mr-2 ml-0.5 opacity-0 group-hover:opacity-100">
             <i-drag size="20" />
         </v-btn>
 
