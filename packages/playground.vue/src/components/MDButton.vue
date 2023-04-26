@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { usePageContext } from '@/composables/page-context'
 import { computed } from 'vue'
 
 const props = defineProps({
@@ -7,6 +8,8 @@ const props = defineProps({
         required: true,
     },
 })
+
+const pageContext = usePageContext()
 
 const innerLabel = computed(() => {
     if (props.modelValue.attrs.label) {
@@ -40,7 +43,13 @@ const style = computed(() => {
 })
 
 function onClick() {
-    console.log('clicked')
+    const onclickFnName = props.modelValue.events.click
+
+    if (!onclickFnName) {
+        return
+    }
+
+    pageContext.emit(onclickFnName)
 }
 </script>
 <template>

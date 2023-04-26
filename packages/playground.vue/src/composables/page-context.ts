@@ -1,23 +1,23 @@
-import { inject, provide, reactive } from 'vue'
+import { inject, provide, reactive, ref } from 'vue'
 
 export function createContext() {
-    const variables = reactive<any>({})
-    const methods = reactive<any>({})
+    const variables = ref<any>({})
+    const methods = ref<any>({})
 
     function setVariables(payload: Record<string, unknown>) {
-        Object.assign(variables, payload)
+        variables.value = payload
     }
 
     function setMethods(payload: Record<string, Function>) {
-        Object.assign(methods, payload)
+        methods.value = payload
     }
 
     function emit(event: string, ...args: unknown[]) {
-        if (!methods[event]) {
+        if (!methods.value[event]) {
             throw new Error(`Event ${event} is not defined`)
         }
 
-        methods[event](...args)
+        methods.value[event](...args)
     }
 
     function get(key: string) {
@@ -28,12 +28,14 @@ export function createContext() {
         return variables[key]
     }
 
-    return {
+    return reactive({
         emit,
         get,
+        methods,
+        variables,
         setVariables,
         setMethods,
-    }
+    })
 }
 
 export function providePageContext() {
@@ -45,5 +47,9 @@ export function providePageContext() {
 }
 
 export function usePageContext() {
-    return inject('page-context') as ReturnType<typeof createContext>
+    const context = inject('page-context')
+
+    if (!context) throw new Error('Page context is not provided')
+
+    return context as ReturnType<typeof createContext>
 }

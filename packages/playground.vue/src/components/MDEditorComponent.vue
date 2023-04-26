@@ -6,6 +6,7 @@ import { useEditor } from '@/composables/editor'
 import { computed, ref, watch } from 'vue'
 
 import MDButton from './MDButton.vue'
+import { useHelper } from '@/composables/helpers'
 
 const modelValue = defineProp<Node>('modelValue', {
     required: true,
@@ -19,35 +20,18 @@ const model = computed({
 })
 
 const editor = useEditor()
+const helper = useHelper()
 
 const loading = ref(false)
 const name = ref('')
 const content = ref('')
 
 function setName() {
-    const endIndex = model.value.tokens.findIndex((token) => token.type === TokenType.BreakLine)
-
-    const nameTokens = model.value.tokens.slice(0, endIndex)
-
-    name.value = nameTokens
-        .map((token) => token.value)
-        .join('')
-        .replace('::', '')
-        .trim()
+    name.value = helper.findNodeComponentName(model.value)
 }
 
 function setContent() {
-    const endNameIndex = model.value.tokens.findIndex((token) => token.type === TokenType.BreakLine)
-    const startContentIndex = endNameIndex + 1
-
-    const contentTokens = model.value.tokens.slice(startContentIndex)
-
-    content.value = contentTokens
-        .map((token) => token.value)
-        .join('')
-        .split('\n')
-        .map((line) => line.replace(/^ {4}/, '')) // remove 4 spaces
-        .join('\n')
+    content.value = helper.findNodeComponentContent(model.value)
 }
 
 function update() {
@@ -84,45 +68,8 @@ const componentData = ref({
 })
 
 function setComponentData() {
-    const endNameIndex = model.value.tokens.findIndex((token) => token.type === TokenType.BreakLine)
-    const startContentIndex = endNameIndex + 1
-
-    const contentTokens = model.value.tokens.slice(startContentIndex)
-
-    const attrs: any = {}
-    const events: any = {}
-
-    for (let i = 0; i < contentTokens.length; i++) {
-        const prev = contentTokens[i - 1]
-        const current = contentTokens[i]
-        const next = contentTokens[i + 1]
-
-        if (prev?.value !== ':' && prev?.value !== '@') continue
-        if (next?.value !== '=') continue
-
-        const tokens = contentTokens.slice(i + 2)
-        const end = tokens.findIndex(
-            (t) => t.type === TokenType.BreakLine || t.type === TokenType.EndOfFile
-        )
-
-        const value = tokens
-            .slice(0, end)
-            .map((t) => t.value)
-            .join('')
-            .replace(/^"(.*)"$/, '$1')
-
-        if (prev.value === '@') {
-            events[current.value] = value
-            continue
-        }
-
-        attrs[current.value] = value
-    }
-
-    componentData.value = {
-        attrs,
-        events,
-    }
+    componentData.value.attrs = helper.findNodeComponentProps(model.value)
+    componentData.value.events = helper.findNodeComponentEvents(model.value)
 }
 
 watch(content, setComponentData, { immediate: true })

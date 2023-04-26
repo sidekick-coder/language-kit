@@ -1,8 +1,8 @@
 :: button
-    :label="Hello"
+    #label="Hello"
 
 :: button
-    :label="Red button"
-    :color="red"
-    :textColor="white"
+    #label="Red button"
+    #color="red"
+    #textColor="white"
 
