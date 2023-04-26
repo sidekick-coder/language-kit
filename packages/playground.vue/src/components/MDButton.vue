@@ -12,11 +12,22 @@ const props = defineProps({
 const pageContext = usePageContext()
 
 const innerLabel = computed(() => {
+    let label = ''
+
     if (props.modelValue.attrs.label) {
-        return props.modelValue.attrs.label
+        label = props.modelValue.attrs.label
     }
 
-    return ''
+    if (label.includes('${')) {
+        label = label.replace(/\${(.*?)}/g, (match, p1) => {
+            return pageContext.get(p1)
+        })
+    }
+
+    return label
+        .replace(/^"(.*)"$/, '$1')
+        .replace(/^'(.*)'$/, '$1')
+        .replace(/^`(.*)`$/, '$1')
 })
 
 const innerColor = computed(() => {
@@ -45,11 +56,29 @@ const style = computed(() => {
 function onClick() {
     const onclickFnName = props.modelValue.events.click
 
-    if (!onclickFnName) {
-        return
+    if (!onclickFnName) return
+
+    const fnArgs = onclickFnName.match(/\((.*?)\)/)?.[0] ?? ''
+    const fnName = onclickFnName.replace(fnArgs, '')
+
+    const args: string[] = []
+
+    if (onclickFnName.includes('(')) {
+        fnArgs
+            .replace('(', '')
+            .replace(')', '')
+            .split(',')
+            .forEach((arg: string) => {
+                // replace quotes if it's a string
+                if (arg.startsWith('"') && arg.endsWith('"')) {
+                    return args.push(arg.replace(/"/g, ''))
+                }
+
+                return args.push(arg)
+            })
     }
 
-    pageContext.emit(onclickFnName)
+    pageContext.emit(fnName, ...args)
 }
 </script>
 <template>

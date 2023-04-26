@@ -14,18 +14,19 @@ export function createContext() {
 
     function emit(event: string, ...args: unknown[]) {
         if (!methods.value[event]) {
-            throw new Error(`Event ${event} is not defined`)
+            console.error(`Event ${event} is not defined`)
+            return
         }
 
         methods.value[event](...args)
     }
 
     function get(key: string) {
-        if (!variables[key]) {
-            throw new Error(`Variable ${key} is not defined`)
+        if (!variables.value[key]) {
+            return undefined
         }
 
-        return variables[key]
+        return variables.value[key]()
     }
 
     return reactive({

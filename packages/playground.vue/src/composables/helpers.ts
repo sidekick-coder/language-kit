@@ -40,7 +40,6 @@ export function findNodeComponentProps(node: Node) {
             .slice(0, end)
             .map((t) => t.value)
             .join('')
-            .replace(/^"(.*)"$/, '$1')
 
         props[current.value] = value
     }
@@ -93,7 +92,6 @@ export function findNodeComponentMethods(node: Node) {
 
     for (let i = 0; i < contentTokens.length; i++) {
         const prev = contentTokens[i - 1]
-        const current = contentTokens[i]
         const next = contentTokens[i + 1]
 
         if (prev?.value !== 'function') continue
@@ -102,6 +100,28 @@ export function findNodeComponentMethods(node: Node) {
     }
 
     return methods
+}
+
+export function findNodeComponentVariables(node: Node) {
+    const endNameIndex = node.tokens.findIndex((token) => token.type === TokenType.BreakLine)
+    const startContentIndex = endNameIndex + 1
+
+    const contentTokens = node.tokens.slice(startContentIndex)
+
+    const result: string[] = []
+
+    for (let i = 0; i < contentTokens.length; i++) {
+        const prev = contentTokens[i - 1]
+        const next = contentTokens[i + 1]
+
+        const isValid = [prev?.value === 'let', prev?.value === 'const', prev?.value === 'var']
+
+        if (!isValid.includes(true)) continue
+
+        result.push(next?.value)
+    }
+
+    return result
 }
 
 export function findNodeComponentContent(node: Node) {
@@ -125,5 +145,6 @@ export function useHelper() {
         findNodeComponentEvents,
         findNodeComponentContent,
         findNodeComponentMethods,
+        findNodeComponentVariables,
     }
 }
