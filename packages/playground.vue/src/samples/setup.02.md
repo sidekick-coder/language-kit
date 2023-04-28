@@ -12,7 +12,9 @@
     }
 
 
-## Count {{ count }}
+## Use count in heading {{ count }}
+
+Use count in paragraph {{ count }}
 
 :: button
     :label=`Increment ${count}`

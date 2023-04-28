@@ -4,8 +4,8 @@ import { MarkdownTokenType } from '@language-kit/markdown'
 import { TokenType } from '@language-kit/lexer'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useEditor } from '@/composables/editor'
-import debounce from 'lodash/debounce'
-import { onClickOutside } from '@vueuse/core'
+
+import MDEditorHtml from './MDEditorHtml.vue'
 
 const modelValue = defineProp<Node>('modelValue', {
     required: true,
@@ -26,19 +26,17 @@ const text = ref('')
 function load() {
     const mdTokens = editor.parser.toMarkdownTokens(model.value.tokens)
 
-    // console.log(mdTokens)
-
     const content = mdTokens.map((token) => {
         if (token.type === MarkdownTokenType.BoldText) {
-            return `<b>${token.data.text}</b>`
+            return `<span style="font-weight: bold">${token.data.text}</span>`
         }
 
         if (token.type === MarkdownTokenType.ItalicText) {
-            return `<i>${token.data.text}</i>`
+            return `<span style="font-style: italic">${token.data.text}</span>`
         }
 
         if (token.type === MarkdownTokenType.ItalicAndBoldText) {
-            return `<i><b>${token.data.text}</b></i>`
+            return `<span style="font-weight: bold; font-style: italic">${token.data.text}</span>`
         }
 
         return token.value
@@ -47,17 +45,32 @@ function load() {
     text.value = content.join('')
 }
 
-function update() {
-    if (!el.value) return
+function update(htmlText: string) {
+    let content = htmlText
 
-    let content = el.value?.innerHTML || ''
+    content = content.replace(/&nbsp;/g, ' ')
 
-    content = content
-        .replace(/&nbsp;/g, ' ')
-        .replace(/<b>/g, '**')
-        .replace(/<\/b>/g, '**')
-        .replace(/<i>/g, '*')
-        .replace(/<\/i>/g, '*')
+    // replace all <span> element in strings an transform style to markdown bold/italic
+
+    content = content.replace(/<span(.*?)>(.*?)<\/span>/g, (match, p1, p2) => {
+        if (p1.includes('color')) {
+            return match
+        }
+
+        if (p1.includes('font-weight: bold') && p1.includes('font-style: italic')) {
+            return `***${p2}***`
+        }
+
+        if (p1.includes('font-weight: bold')) {
+            return `**${p2}**`
+        }
+
+        if (p1.includes('font-style: italic')) {
+            return `*${p2}*`
+        }
+
+        return p2
+    })
 
     const tokens = editor.toTokens(content.trim() + '\n')
 
@@ -73,93 +86,12 @@ function update() {
 watch(model, load)
 
 onMounted(load)
-
-// actions
-
-const showActions = ref(false)
-
-const onMouseUp = debounce(() => {
-    showActions.value = false
-
-    const selection = window.getSelection()
-
-    const text = selection?.toString()
-
-    if (!selection || !text) return
-
-    showActions.value = true
-}, 100)
-
-function toggleBold() {
-    const selection = window.getSelection()
-
-    const text = selection?.toString()
-
-    if (!selection || !text) return
-
-    const range = selection.getRangeAt(0)
-
-    const isBold = range.startContainer.parentElement?.tagName === 'B'
-
-    if (isBold) {
-        const bold = range.startContainer.parentElement
-
-        bold.remove()
-
-        range.deleteContents()
-        range.insertNode(document.createTextNode(bold.innerText))
-    }
-
-    if (!isBold) {
-        const bold = document.createElement('b')
-
-        bold.innerHTML = text
-
-        range.deleteContents()
-        range.insertNode(bold)
-    }
-
-    update()
-}
-
-function toggleItalic() {
-    const selection = window.getSelection()
-
-    const text = selection?.toString()
-
-    if (!selection || !text) return
-
-    const range = selection.getRangeAt(0)
-
-    const isItalic = range.startContainer.parentElement?.tagName === 'I'
-
-    if (isItalic) {
-        const italic = range.startContainer.parentElement
-
-        italic.remove()
-
-        range.deleteContents()
-        range.insertNode(document.createTextNode(italic.innerText))
-    }
-
-    if (!isItalic) {
-        const italic = document.createElement('i')
-
-        italic.innerHTML = text
-
-        range.deleteContents()
-        range.insertNode(italic)
-    }
-
-    update()
-}
-
-onClickOutside(el, () => {
-    showActions.value = false
-})
 </script>
 <template>
-    <div class="h-full w-full relative">
+    <p>
+        <MDEditorHtml :model-value="text" @update:model-value="update" />
+    </p>
+    <!-- <div class="h-full w-full relative">
         <div
             v-if="showActions"
             class="border p-2 text-xs rounded absolute top-0 left-0 bg-gray-500 mt-[-42px]"
@@ -177,5 +109,5 @@ onClickOutside(el, () => {
             @mouseup="onMouseUp"
             v-html="text"
         />
-    </div>
+    </div> -->
 </template>

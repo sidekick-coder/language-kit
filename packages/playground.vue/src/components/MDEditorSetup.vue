@@ -33,7 +33,7 @@ content = content
     .replace(/import { (.*?) } from "vue"/g, `const { $1 } = window._VUE_`)
 
 const componentRef = ref<any>(null)
-const component = {
+const componentObject = {
     name: 'MDEditorSetupContext',
     template: '<div class="hidden">setup</div>',
     setup: new Function('context', content),
@@ -44,6 +44,9 @@ function callMethod(name: string, ...args: any) {
 }
 
 function load() {
+    if (!componentRef.value) {
+        return
+    }
     const callMethods: any = {}
     const getVariables: any = {}
 
@@ -52,7 +55,8 @@ function load() {
     })
 
     variables.forEach((variable) => {
-        getVariables[variable] = () => componentRef.value[variable]
+        getVariables[variable] = () =>
+            componentRef.value ? componentRef.value[variable] : undefined
     })
 
     pageContext.setMethods(callMethods)
@@ -64,5 +68,5 @@ onMounted(load)
 watch(model, load)
 </script>
 <template>
-    <component :is="component" ref="componentRef" />
+    <component :is="componentObject" ref="componentRef" />
 </template>

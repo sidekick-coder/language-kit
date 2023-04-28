@@ -31,11 +31,15 @@ const innerLabel = computed(() => {
 })
 
 const innerColor = computed(() => {
+    let color = 'white'
     if (props.modelValue.attrs.color) {
-        return props.modelValue.attrs.color
+        color = props.modelValue.attrs.color
     }
 
-    return 'white'
+    return color
+        .replace(/^"(.*)"$/, '$1')
+        .replace(/^'(.*)'$/, '$1')
+        .replace(/^`(.*)`$/, '$1')
 })
 
 const innerTextColor = computed(() => {

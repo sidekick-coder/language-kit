@@ -5,6 +5,8 @@ import { computed, onMounted, ref, watch } from 'vue'
 
 import { useEditor } from '@/composables/editor'
 
+import MDEditorHtml from './MDEditorHtml.vue'
+
 const modelValue = defineProp<Node>('modelValue', {
     required: true,
 })
@@ -34,12 +36,12 @@ function load() {
     text.value = content
 }
 
-function update() {
+function update(newText: string) {
     const level = model.value.tokens.findIndex((token) => token.value !== '#')
 
     let content = '#'.repeat(level) + ' '
 
-    content += el.value?.innerText || ''
+    content += newText || ''
 
     const tokens = editor.toTokens(content)
 
@@ -59,14 +61,7 @@ onMounted(load)
 // level
 </script>
 <template>
-    <component
-        :is="tag"
-        ref="el"
-        class="w-full focus:outline-none"
-        contenteditable
-        @input="update"
-        @keydown.enter.prevent
-    >
-        {{ text }}
+    <component :is="tag">
+        <MDEditorHtml :model-value="text" @update:model-value="update" />
     </component>
 </template>
