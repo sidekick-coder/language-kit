@@ -2,32 +2,36 @@
 import { usePageContext } from '@/composables/page-context'
 import { onClickOutside } from '@vueuse/core'
 import { debounce } from 'lodash'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 // content
 
 const context = usePageContext()
 
 const modelValue = defineProp<string>('modelValue')
+const modifiers = defineProp<any>('modelModifiers', {
+    default: () => ({}),
+})
 const updateValue = defineEmit('update:modelValue')
 
 const el = ref<HTMLElement>()
 const textUseVariable = computed(() => modelValue.value.includes('{{'))
-const innerModel = computed({
-    get: () => {
-        let text = modelValue.value
+const innerModel = ref('')
 
-        Object.keys(context.variables).forEach((key) => {
-            text = text.replace(`{{ ${key} }}`, context.get(key))
-        })
+function onInput() {
+    if (modifiers.value.lazy) return
 
-        return text
-    },
-    set: (value) => updateValue(value),
-})
+    const text = el.value?.innerHTML || ''
 
-function update() {
-    innerModel.value = el.value?.innerHTML || ''
+    updateValue(text)
+}
+
+function onChange() {
+    if (!modifiers.value.lazy) return
+
+    const text = el.value?.innerHTML || ''
+
+    updateValue(text)
 }
 
 function onClick() {
@@ -37,6 +41,24 @@ function onClick() {
 
     alert('You can not edit this text because it contains a variable.')
 }
+
+function setInnerModel() {
+    let text = modelValue.value
+
+    Object.keys(context.variables).forEach((key) => {
+        text = text.replace(`{{ ${key} }}`, context.get(key))
+    })
+
+    if (text === innerModel.value) return
+
+    if (text === el.value?.innerHTML) return
+
+    innerModel.value = text
+}
+
+watch(modelValue, setInnerModel, {
+    immediate: true,
+})
 
 // selection actions
 
@@ -97,7 +119,7 @@ function toggleBold() {
         element?.style.setProperty('font-weight', 'bold')
     }
 
-    return update()
+    return onInput()
 }
 
 function toggleItalic() {
@@ -113,7 +135,7 @@ function toggleItalic() {
         element?.style.setProperty('font-style', 'italic')
     }
 
-    return update()
+    return onInput()
 }
 
 function setColor(color?: string) {
@@ -124,16 +146,26 @@ function setColor(color?: string) {
     if (!color) {
         element.style.removeProperty('color')
 
-        return update()
+        return onInput()
     }
 
     element.style.color = color
 
-    return update()
+    return onInput()
 }
 
 onClickOutside(el, () => (showToolbar.value = false), {
     ignore: [toolbarRef],
+})
+
+// focus
+
+const isFocus = ref(false)
+
+watch(isFocus, (value) => {
+    if (!value) {
+        onChange()
+    }
 })
 </script>
 <template>
@@ -141,10 +173,13 @@ onClickOutside(el, () => (showToolbar.value = false), {
         ref="el"
         class="w-full focus:outline-none editor-html-container"
         :contenteditable="!textUseVariable"
-        @input="update"
+        @input="onInput"
+        @change="onChange"
         @click="onClick"
         @mouseup="onMouseUp"
-        @keydown.enter.prevent
+        @keydown.enter.prevent="onChange"
+        @focus="isFocus = true"
+        @blur="isFocus = false"
         v-html="innerModel"
     />
 

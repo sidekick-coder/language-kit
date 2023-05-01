@@ -20,7 +20,6 @@ const model = computed({
 
 // Text
 const editor = useEditor()
-const el = ref<HTMLElement>()
 const tag = ref('h1')
 const text = ref('')
 
@@ -43,7 +42,7 @@ function update(newText: string) {
 
     content += newText || ''
 
-    const tokens = editor.toTokens(content)
+    const tokens = editor.toTokens(content.trim())
 
     const last = model.value.tokens[model.value.tokens.length - 1]
 
@@ -61,7 +60,7 @@ onMounted(load)
 // level
 </script>
 <template>
-    <component :is="tag">
+    <component :is="tag" class="w-full">
         <MDEditorHtml :model-value="text" @update:model-value="update" />
     </component>
 </template>

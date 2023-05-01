@@ -20,7 +20,6 @@ const model = computed({
 
 // Text
 const editor = useEditor()
-const el = ref<HTMLElement>()
 const text = ref('')
 
 function load() {
@@ -91,23 +90,4 @@ onMounted(load)
     <p>
         <MDEditorHtml :model-value="text" @update:model-value="update" />
     </p>
-    <!-- <div class="h-full w-full relative">
-        <div
-            v-if="showActions"
-            class="border p-2 text-xs rounded absolute top-0 left-0 bg-gray-500 mt-[-42px]"
-        >
-            <v-btn class="bg-gray-600" @click="toggleBold"> Bold </v-btn>
-            <v-btn class="bg-gray-600" @click="toggleItalic"> Italic </v-btn>
-        </div>
-
-        <p
-            ref="el"
-            class="w-full focus:outline-none"
-            contenteditable
-            @input="update"
-            @keydown.enter.prevent
-            @mouseup="onMouseUp"
-            v-html="text"
-        />
-    </div> -->
 </template>

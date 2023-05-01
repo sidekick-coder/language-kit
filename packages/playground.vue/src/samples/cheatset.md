@@ -26,3 +26,9 @@ This text is ***Italic and bold text***.
 # Blokquotes
 
 > This is a blokquote
+
+# List
+
+- item 01
+- item 02
+- item 03

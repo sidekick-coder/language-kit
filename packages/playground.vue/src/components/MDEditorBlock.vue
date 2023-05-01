@@ -8,6 +8,7 @@ import MDEditorBlockHeading from './MDEditorBlockHeading.vue'
 import MDEditorComponent from './MDEditorComponent.vue'
 import MDEditorBlockParagraph from './MDEditorBlockParagraph.vue'
 import MDEditorBlockQuote from './MDEditorBlockQuote.vue'
+import MDEditorBlockList from './MDEditorBlockList.vue'
 
 import { TokenType } from '@language-kit/lexer'
 
@@ -53,6 +54,8 @@ const isSetup = computed(() => {
         <MDEditorBlockParagraph v-else-if="model.type === NodeType.Paragraph" v-model="model" />
 
         <MDEditorBlockQuote v-else-if="model.type === NodeType.Blockquote" v-model="model" />
+
+        <MDEditorBlockList v-else-if="model.type === NodeType.List" v-model="model" />
 
         <div v-else>Unknown block type: {{ model.type }}</div>
     </div>
