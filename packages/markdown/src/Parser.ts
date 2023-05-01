@@ -14,11 +14,13 @@ import { MarkdownToken } from './MarkdownToken'
 import MarkdownTokenProcessorITalic from './markdown-token-processors/Italic'
 import MarkdownTokenProcessorITalicAndBold from './markdown-token-processors/ItalicAndBold'
 import BlockquoteProcessor from './processors/Blockquote'
+import ListProcessor from './processors/List'
 
 export class Parser {
     private lexer = new Lexer()
     private processors: BaseProcessor[] = [
         new HeadingProcessor(),
+        new ListProcessor(),
         new ParagraphProcessor(),
         new ComponentProcessor(),
         new BlockquoteProcessor(),

@@ -97,6 +97,33 @@ describe('markdown parser', () => {
         expect(nodes).toEqual([exepected])
     })
 
+    it('shoud transform markdown text in list node', () => {
+        const payload = ['- item 01', '- item 02'].join('\n')
+
+        const nodes = parser.toNodes(payload)
+
+        const exepected = new Node({
+            type: NodeType.List,
+        })
+
+        exepected.tokens = [
+            Token.symbol('-'),
+            Token.whiteSpace(' '),
+            Token.word('item'),
+            Token.whiteSpace(' '),
+            Token.word('01'),
+            Token.breakLine(),
+            Token.symbol('-'),
+            Token.whiteSpace(' '),
+            Token.word('item'),
+            Token.whiteSpace(' '),
+            Token.word('02'),
+            Token.endOfFile(),
+        ]
+
+        expect(nodes).toEqual([exepected])
+    })
+
     it('should transform tokens to markdown tokens', () => {
         const payload = 'This is a **bold text** \n\n'
 
