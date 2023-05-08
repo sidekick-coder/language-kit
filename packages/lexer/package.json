@@ -1,6 +1,6 @@
 {
   "name": "@language-kit/lexer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Transforms a string into a list of tokens",
   "publishConfig": {
     "access": "public"
@@ -23,6 +23,7 @@
     "test": "vitest",
     "build": "tsup",
     "dev": "tsup --watch",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "make:version": "npm version --no-git-tag-version"
   }
 }
