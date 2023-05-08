@@ -10,8 +10,8 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false"
   },
   "dependencies": {
-    "@language-kit/lexer": "^0.0.1",
-    "@language-kit/markdown": "^0.0.1",
+    "@language-kit/lexer": "*",
+    "@language-kit/markdown": "*",
     "@vueuse/core": "^9.13.0",
     "lodash": "^4.17.21",
     "vue": "^3.2.47"

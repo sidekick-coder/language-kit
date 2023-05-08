@@ -5,7 +5,7 @@
     "start:ts": "tsx index.ts"
   },
   "dependencies": {
-    "@language-kit/lexer": "^0.0.1",
-    "@language-kit/markdown": "^0.0.1"
+    "@language-kit/lexer": "*",
+    "@language-kit/markdown": "*"
   }
 }
