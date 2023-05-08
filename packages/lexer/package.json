@@ -4,12 +4,12 @@
   "description": "Transforms a string into a list of tokens",
   "author": "Henrique Oliveira <henriqueoliwork@gmail.com>",
   "license": "MIT",
+  "homepage": "https://github.com/sidekick-coder/language-kit",
   "keywords": [
     "lexer",
     "tokenizer",
     "language"
   ],
-  "homepage": "https://github.com/sidekick-coder/language-kit",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sidekick-coder/language-kit.git"
