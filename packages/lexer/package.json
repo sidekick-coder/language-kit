@@ -1,17 +1,25 @@
 {
   "name": "@language-kit/lexer",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Transforms a string into a list of tokens",
-  "publishConfig": {
-    "access": "public"
-  },
+  "author": "Henrique Oliveira <henriqueoliwork@gmail.com>",
+  "license": "MIT",
   "keywords": [
     "lexer",
     "tokenizer",
     "language"
   ],
-  "author": "Henrique Oliveira <henriqueoliwork@gmail.com>",
-  "license": "MIT",
+  "homepage": "https://github.com/sidekick-coder/language-kit",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sidekick-coder/language-kit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sidekick-coder/language-kit/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
