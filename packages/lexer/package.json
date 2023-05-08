@@ -1,7 +1,10 @@
 {
   "name": "@language-kit/lexer",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Transforms a string into a list of tokens",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "lexer",
     "tokenizer",
@@ -19,6 +22,7 @@
   "scripts": {
     "test": "vitest",
     "build": "tsup",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "prepublishOnly": "npm run build"
   }
 }
