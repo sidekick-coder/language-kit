@@ -1,15 +1,11 @@
 import { Parser } from '@language-kit/markdown'
 
+import utils from 'util'
 
 const parser = new Parser()
 
-
-const text = [
-    '# Hello, world!',
-    '',
-    'This is a paragraph.',
-].join('\n')
+const text = ['# Heading', '', 'Paragraph.'].join('\n')
 
 const nodes = parser.toNodes(text)
 
-console.log(JSON.stringify(nodes, null, 2))
+console.log(utils.inspect(nodes, { depth: null }))
