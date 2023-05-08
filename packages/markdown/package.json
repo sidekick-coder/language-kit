@@ -1,6 +1,6 @@
 {
   "name": "@language-kit/markdown",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Parser and process markdown strings",
   "author": "Henrique Oliveira <henriqueoliwork@gmail.com>",
   "license": "MIT",
@@ -34,6 +34,6 @@
     "make:version": "npm version --no-git-tag-version"
   },
   "dependencies": {
-    "@language-kit/lexer": "^1.0.4"
+    "@language-kit/lexer": "^1.0.5"
   }
 }
