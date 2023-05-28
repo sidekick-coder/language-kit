@@ -28,8 +28,6 @@ export default class ComponentProcessor extends BaseProcessor {
 
         const tokens = this.tokens.slice(0, endIndex + 1)
 
-        console.log(tokens)
-
         this.addNode({
             type: NodeType.Component,
             tokens,

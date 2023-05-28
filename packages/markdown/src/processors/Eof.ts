@@ -11,6 +11,8 @@ export default class EofProcessor extends BaseProcessor {
 
         const lastIndex = this.nodes.length - 1
 
+        if (!this.nodes[lastIndex]) return false
+
         this.nodes[lastIndex].tokens.push(current)
 
         this.removeTokens(0, 1)
