@@ -134,11 +134,11 @@ export default class ComponentProcessor extends BaseProcessor {
         for (const line of lines) {
             const [first] = line
 
-            if (haveAttr && !patterns.includes(first.value)) {
+            if (haveAttr && !patterns.includes(first?.value)) {
                 haveAttr = false
             }
 
-            if (haveAttr && patterns.includes(first.value)) {
+            if (haveAttr && patterns.includes(first?.value)) {
                 continue
             }
 
