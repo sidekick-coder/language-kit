@@ -140,6 +140,47 @@ describe('Component processor', () => {
         expect(node.tokens).toEqual(expected.tokens)
     })
 
+    it('should process NodeComponent with events with attrs and props', () => {
+        const payload = [
+            ':: button',
+            '@click1="hello"',
+            ':color="123"',
+            '#data="hi"',
+            'Body of component',
+            '::',
+        ].join('\n')
+
+        const result = parser.toNodes(payload)
+        const node = result[0] as NodeComponent
+
+        const tokens = parser.toTokens(payload)
+
+        const expected = new NodeComponent({
+            type: NodeType.Component,
+            name: 'button',
+            body: 'Body of component',
+            attrs: {
+                data: 'hi',
+            },
+            props: {
+                color: '123',
+            },
+            events: {
+                click1: 'hello',
+            },
+            tokens,
+        })
+
+        expect(result.length).toBe(1)
+
+        expect(node.name).toBe(expected.name)
+        expect(node.body).toBe(expected.body)
+        expect(node.attrs).toEqual(expected.attrs)
+        expect(node.props).toEqual(expected.props)
+        expect(node.events).toEqual(expected.events)
+        expect(node.tokens).toEqual(expected.tokens)
+    })
+
     it('should not transform attrs, props, events after body is defined', () => {
         const payload = [
             ':: button',

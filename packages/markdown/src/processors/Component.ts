@@ -36,13 +36,61 @@ export default class ComponentProcessor extends BaseProcessor {
             .trim()
     }
 
+    public findBodyStartIndex() {
+        const start = this.tokens.findIndex((t) => t.type === TokenType.BreakLine)
+        const end = this.findEndIndex()
+
+        if ([start, end].includes(-1)) return -1
+
+        const lines = this.tokensToLines(this.tokens.slice(start, end - 1))
+        const firstLine = lines[0]
+
+        const patterns = ['#', ':', '@']
+
+        let haveAttr = firstLine && patterns.includes(firstLine[0]?.value)
+
+        for (const line of lines) {
+            const [first] = line
+
+            if (haveAttr && !patterns.includes(first?.value)) {
+                haveAttr = false
+            }
+
+            if (haveAttr && patterns.includes(first?.value)) {
+                continue
+            }
+
+            return this.tokens.indexOf(first)
+        }
+
+        return -1
+    }
+
+    public findBody() {
+        const start = this.findBodyStartIndex()
+        const end = this.findEndIndex()
+
+        if ([start, end].includes(-1)) return ''
+
+        return this.tokens
+            .slice(start, end - 1)
+            .map((t) => t.value)
+            .join('')
+            .trim()
+    }
+
     public findAttrs() {
         const attrs: NodeComponent['attrs'] = {}
 
-        const lines = this.findLines()
+        const start = this.tokens.findIndex((t) => t.type === TokenType.BreakLine)
+        const end = this.findBodyStartIndex()
+
+        if ([start, end].includes(-1)) return attrs
+
+        const lines = this.tokensToLines(this.tokens.slice(start, end))
 
         for (const line of lines) {
-            if (line[0]?.value !== '#') break
+            if (line[0]?.value !== '#') continue
 
             const endKeyIndex = line.findIndex((t) => t.value === '=')
             const endValueIndex = line.findIndex((t) => t.type === TokenType.BreakLine)
@@ -66,10 +114,15 @@ export default class ComponentProcessor extends BaseProcessor {
     public findProps() {
         const props: NodeComponent['props'] = {}
 
-        const lines = this.findLines()
+        const start = this.tokens.findIndex((t) => t.type === TokenType.BreakLine)
+        const end = this.findBodyStartIndex()
+
+        if ([start, end].includes(-1)) return props
+
+        const lines = this.tokensToLines(this.tokens.slice(start, end))
 
         for (const line of lines) {
-            if (line[0]?.value !== ':') break
+            if (line[0]?.value !== ':') continue
 
             const endKeyIndex = line.findIndex((t) => t.value === '=')
             const endValueIndex = line.findIndex((t) => t.type === TokenType.BreakLine)
@@ -93,7 +146,12 @@ export default class ComponentProcessor extends BaseProcessor {
     public findEvents() {
         const events: NodeComponent['events'] = {}
 
-        const lines = this.findLines()
+        const start = this.tokens.findIndex((t) => t.type === TokenType.BreakLine)
+        const end = this.findBodyStartIndex()
+
+        if ([start, end].includes(-1)) return events
+
+        const lines = this.tokensToLines(this.tokens.slice(start, end))
 
         for (const line of lines) {
             if (line[0]?.value !== '@') break
@@ -115,39 +173,6 @@ export default class ComponentProcessor extends BaseProcessor {
         }
 
         return events
-    }
-
-    public findBody() {
-        const start = this.tokens.findIndex((t) => t.type === TokenType.BreakLine)
-        const end = this.findEndIndex()
-
-        if ([start, end].includes(-1)) return ''
-
-        const lines = this.tokensToLines(this.tokens.slice(start, end - 1))
-        const firstLine = lines[0]
-
-        const patterns = ['#', ':', '@']
-
-        let body = ''
-        let haveAttr = firstLine && patterns.includes(firstLine[0]?.value)
-
-        for (const line of lines) {
-            const [first] = line
-
-            if (haveAttr && !patterns.includes(first?.value)) {
-                haveAttr = false
-            }
-
-            if (haveAttr && patterns.includes(first?.value)) {
-                continue
-            }
-
-            body += line.map((t) => t.value).join('') + '\n'
-        }
-
-        body = body.trim()
-
-        return body
     }
 
     public process: BaseProcessor['process'] = () => {
