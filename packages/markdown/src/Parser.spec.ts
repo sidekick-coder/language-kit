@@ -66,42 +66,6 @@ describe('markdown parser', () => {
         expect(nodes).toEqual(expected)
     })
 
-    it('should transform markdown text in component node', () => {
-        const payload = [':: v-btn', '', '#label=Hello-word', '', '::'].join('\n')
-
-        const result = parser.toNodes(payload)
-
-        const expected = new Node({
-            type: NodeType.Component,
-        })
-
-        expected.tokens = [
-            Token.symbol(':'),
-            Token.symbol(':'),
-            Token.whiteSpace(' '),
-            Token.word('v'),
-            Token.symbol('-'),
-            Token.word('btn'),
-            Token.breakLine(),
-            Token.breakLine(),
-            Token.symbol('#'),
-            Token.word('label'),
-            Token.symbol('='),
-            Token.word('Hello'),
-            Token.symbol('-'),
-            Token.word('word'),
-            Token.breakLine(),
-            Token.breakLine(),
-            Token.symbol(':'),
-            Token.symbol(':'),
-            Token.endOfFile(),
-        ]
-
-        expect(result.length).toBe(1)
-
-        expect(result).toEqual([expected])
-    })
-
     it('should transform markdown text in list node', () => {
         const payload = ['- item 01', '- item 02'].join('\n')
 

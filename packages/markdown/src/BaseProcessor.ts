@@ -20,6 +20,10 @@ export class BaseProcessor {
     }
 
     public addNode(payload: Pick<Node, 'type' | 'tokens'>) {
+        if (payload instanceof Node) {
+            return this.nodes.push(payload)
+        }
+
         const mdNode = new Node()
 
         mdNode.type = payload.type
@@ -32,6 +36,48 @@ export class BaseProcessor {
         return this.tokens.findIndex(
             (t) => t.type === TokenType.BreakLine || t.type === TokenType.EndOfFile
         )
+    }
+
+    public tokensToLines(tokens: Token[]) {
+        const lines: Token[][] = []
+
+        const breakLineIndexes = tokens
+            .filter((t) => t.type === TokenType.BreakLine)
+            .map((t) => tokens.indexOf(t))
+
+        breakLineIndexes.forEach((index, i) => {
+            const nextIndex = breakLineIndexes[i + 1]
+
+            if (nextIndex) {
+                lines.push(tokens.slice(index + 1, nextIndex))
+                return
+            }
+
+            lines.push(tokens.slice(index + 1))
+        })
+
+        return lines
+    }
+
+    public findLines() {
+        const lines: Token[][] = []
+
+        const breakLineIndexes = this.tokens
+            .filter((t) => t.type === TokenType.BreakLine)
+            .map((t) => this.tokens.indexOf(t))
+
+        breakLineIndexes.forEach((index, i) => {
+            const nextIndex = breakLineIndexes[i + 1]
+
+            if (nextIndex) {
+                lines.push(this.tokens.slice(index + 1, nextIndex))
+                return
+            }
+
+            lines.push(this.tokens.slice(index + 1))
+        })
+
+        return lines
     }
 
     /**

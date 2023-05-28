@@ -19,4 +19,25 @@ export class Node {
     public toText() {
         return this.tokens.map((t) => t.value).join('')
     }
+
+    public isComponent(): this is NodeComponent {
+        return this.type === NodeType.Component
+    }
+}
+
+export class NodeComponent extends Node {
+    public readonly type = NodeType.Component
+    public name = ''
+    public attrs: Record<string, string> = {}
+    public props: Record<string, string> = {}
+    public body = ''
+
+    constructor(data: Partial<NodeComponent> = {}) {
+        super(data)
+
+        this.name = data.name || ''
+        this.body = data.body || ''
+        this.attrs = data.attrs || {}
+        this.props = data.props || {}
+    }
 }
