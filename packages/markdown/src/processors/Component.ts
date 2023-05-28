@@ -90,6 +90,33 @@ export default class ComponentProcessor extends BaseProcessor {
         return props
     }
 
+    public findEvents() {
+        const events: NodeComponent['events'] = {}
+
+        const lines = this.findLines()
+
+        for (const line of lines) {
+            if (line[0]?.value !== '@') break
+
+            const endKeyIndex = line.findIndex((t) => t.value === '=')
+            const endValueIndex = line.findIndex((t) => t.type === TokenType.BreakLine)
+
+            const name = line
+                .slice(1, endKeyIndex)
+                .map((t) => t.value)
+                .join('')
+
+            const value = line
+                .slice(endKeyIndex + 2, endValueIndex)
+                .map((t) => t.value)
+                .join('')
+
+            events[name] = value
+        }
+
+        return events
+    }
+
     public findBody() {
         const start = this.tokens.findIndex((t) => t.type === TokenType.BreakLine)
         const end = this.findEndIndex()
@@ -99,17 +126,19 @@ export default class ComponentProcessor extends BaseProcessor {
         const lines = this.tokensToLines(this.tokens.slice(start, end - 1))
         const firstLine = lines[0]
 
+        const patterns = ['#', ':', '@']
+
         let body = ''
-        let haveAttr = firstLine && ['#', ':'].includes(firstLine[0]?.value)
+        let haveAttr = firstLine && patterns.includes(firstLine[0]?.value)
 
         for (const line of lines) {
             const [first] = line
 
-            if (haveAttr && !['#', ':'].includes(first.value)) {
+            if (haveAttr && !patterns.includes(first.value)) {
                 haveAttr = false
             }
 
-            if (haveAttr && ['#', ':'].includes(first.value)) {
+            if (haveAttr && patterns.includes(first.value)) {
                 continue
             }
 
@@ -137,6 +166,7 @@ export default class ComponentProcessor extends BaseProcessor {
             body: this.findBody(),
             attrs: this.findAttrs(),
             props: this.findProps(),
+            events: this.findEvents(),
             tokens,
         })
 

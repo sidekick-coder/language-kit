@@ -100,12 +100,14 @@ describe('Component processor', () => {
         expect(node.tokens).toEqual(expected.tokens)
     })
 
-    it('should not transform attrs & props after body is defined', () => {
+    it('should process NodeComponent with events', () => {
         const payload = [
             ':: button',
-            'Start of body content',
-            '#class="btn"',
-            ':someProp="123"',
+            '@click1="hello"',
+            '@click2="hello()"',
+            '@click3="hello(123)"',
+            '@click4="() => hello()"',
+            'Body of component',
             '::',
         ].join('\n')
 
@@ -117,7 +119,46 @@ describe('Component processor', () => {
         const expected = new NodeComponent({
             type: NodeType.Component,
             name: 'button',
-            body: 'Start of body content\n#class="btn"\n:someProp="123"',
+            body: 'Body of component',
+            attrs: {},
+            props: {},
+            events: {
+                click1: 'hello',
+                click2: 'hello()',
+                click3: 'hello(123)',
+                click4: '() => hello()',
+            },
+            tokens,
+        })
+
+        expect(result.length).toBe(1)
+
+        expect(node.name).toBe(expected.name)
+        expect(node.body).toBe(expected.body)
+        expect(node.attrs).toEqual(expected.attrs)
+        expect(node.props).toEqual(expected.props)
+        expect(node.tokens).toEqual(expected.tokens)
+    })
+
+    it('should not transform attrs, props, events after body is defined', () => {
+        const payload = [
+            ':: button',
+            'Start of body content',
+            '#class="btn"',
+            ':someProp="123"',
+            '@click="hello"',
+            '::',
+        ].join('\n')
+
+        const result = parser.toNodes(payload)
+        const node = result[0] as NodeComponent
+
+        const tokens = parser.toTokens(payload)
+
+        const expected = new NodeComponent({
+            type: NodeType.Component,
+            name: 'button',
+            body: 'Start of body content\n#class="btn"\n:someProp="123"\n@click="hello"',
             attrs: {},
             tokens,
         })

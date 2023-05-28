@@ -30,6 +30,7 @@ export class NodeComponent extends Node {
     public name = ''
     public attrs: Record<string, string> = {}
     public props: Record<string, string> = {}
+    public events: Record<string, string> = {}
     public body = ''
 
     constructor(data: Partial<NodeComponent> = {}) {
@@ -39,5 +40,6 @@ export class NodeComponent extends Node {
         this.body = data.body || ''
         this.attrs = data.attrs || {}
         this.props = data.props || {}
+        this.events = data.events || {}
     }
 }
