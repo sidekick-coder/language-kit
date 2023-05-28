@@ -7,28 +7,28 @@ export default class ComponentProcessor extends BaseProcessor {
 
     public findComponentTokenEndIndex() {
         return this.tokens.findIndex((current, i) => {
+            if (i <= 1) return false
+
             const prev = this.tokens[i - 1]
-            const prevPrev = this.tokens[i - 2]
 
-            if (current.type === TokenType.EndOfFile) return true
+            if (!prev) return false
 
-            if (!prev || !prevPrev) return false
-
-            // must have 3 break lines to end the component
-            return [prev, current, prevPrev].every((v) => v.type === TokenType.BreakLine)
+            return [prev, current].every((t) => t.value === ':')
         })
     }
 
     public process: BaseProcessor['process'] = () => {
-        const [fisrt, second] = this.tokens
+        const [first, second] = this.tokens
 
-        if (fisrt.value !== ':' || second.value !== ':') return false
+        if (first.value !== ':' || second.value !== ':') return false
 
         const endIndex = this.findComponentTokenEndIndex()
 
         if (endIndex === -1) return false
 
         const tokens = this.tokens.slice(0, endIndex + 1)
+
+        console.log(tokens)
 
         this.addNode({
             type: NodeType.Component,

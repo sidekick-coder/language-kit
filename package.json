@@ -5,6 +5,7 @@
   "description": "Set of tools to parse and process custom languages",
   "scripts": {
     "test": "npm test -ws --if-present",
+    "play": "npm -w @language-kit/playground.vue run dev",
     "lint": "eslint . --ext .vue,.ts,.js --max-warnings 0"
   },
   "author": "Henrique Oliveira",

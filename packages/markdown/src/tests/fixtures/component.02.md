@@ -11,3 +11,4 @@
     console.log('Meta', response.meta)
     
     table.setItems(response.data)
+::

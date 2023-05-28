@@ -12,7 +12,7 @@ describe('markdown parser', () => {
 
     const files = useFixturesFiles()
 
-    it('shoud transform markdown text in node heading', () => {
+    it('should transform markdown text in node heading', () => {
         const payload = '# Hello world'
 
         const nodes = parser.toNodes(payload)
@@ -33,12 +33,12 @@ describe('markdown parser', () => {
         expect(nodes).toEqual([mdNode])
     })
 
-    it('shoud transform markdown text in node paragraph', () => {
+    it('should transform markdown text in node paragraph', () => {
         const payload = ['Paragraph 1', '', 'Paragraph 2'].join('\n')
 
         const nodes = parser.toNodes(payload)
 
-        const exepected = [
+        const expected = [
             new Node({
                 type: NodeType.Paragraph,
                 tokens: [
@@ -63,19 +63,19 @@ describe('markdown parser', () => {
             }),
         ]
 
-        expect(nodes).toEqual(exepected)
+        expect(nodes).toEqual(expected)
     })
 
-    it('shoud transform markdown text in component node', () => {
-        const payload = [':: v-btn', '', '    #label=Hello-word'].join('\n')
+    it('should transform markdown text in component node', () => {
+        const payload = [':: v-btn', '', '#label=Hello-word', '', '::'].join('\n')
 
-        const nodes = parser.toNodes(payload)
+        const result = parser.toNodes(payload)
 
-        const exepected = new Node({
+        const expected = new Node({
             type: NodeType.Component,
         })
 
-        exepected.tokens = [
+        expected.tokens = [
             Token.symbol(':'),
             Token.symbol(':'),
             Token.whiteSpace(' '),
@@ -84,29 +84,34 @@ describe('markdown parser', () => {
             Token.word('btn'),
             Token.breakLine(),
             Token.breakLine(),
-            Token.whiteSpace('    '),
             Token.symbol('#'),
             Token.word('label'),
             Token.symbol('='),
             Token.word('Hello'),
             Token.symbol('-'),
             Token.word('word'),
+            Token.breakLine(),
+            Token.breakLine(),
+            Token.symbol(':'),
+            Token.symbol(':'),
             Token.endOfFile(),
         ]
 
-        expect(nodes).toEqual([exepected])
+        expect(result.length).toBe(1)
+
+        expect(result).toEqual([expected])
     })
 
-    it('shoud transform markdown text in list node', () => {
+    it('should transform markdown text in list node', () => {
         const payload = ['- item 01', '- item 02'].join('\n')
 
         const nodes = parser.toNodes(payload)
 
-        const exepected = new Node({
+        const expected = new Node({
             type: NodeType.List,
         })
 
-        exepected.tokens = [
+        expected.tokens = [
             Token.symbol('-'),
             Token.whiteSpace(' '),
             Token.word('item'),
@@ -121,7 +126,7 @@ describe('markdown parser', () => {
             Token.endOfFile(),
         ]
 
-        expect(nodes).toEqual([exepected])
+        expect(nodes).toEqual([expected])
     })
 
     it('should transform tokens to markdown tokens', () => {
@@ -131,7 +136,7 @@ describe('markdown parser', () => {
 
         const markdownTokens = parser.toMarkdownTokens(tokens)
 
-        const exepected = [
+        const expected = [
             MarkdownToken.word('This'),
             MarkdownToken.whiteSpace(' '),
             MarkdownToken.word('is'),
@@ -151,7 +156,7 @@ describe('markdown parser', () => {
             MarkdownToken.endOfFile(),
         ]
 
-        expect(markdownTokens).toEqual(exepected)
+        expect(markdownTokens).toEqual(expected)
     })
 
     it.each(files)('should fixutre $name be converted from nodes to text', (file) => {

@@ -15,6 +15,7 @@ import MarkdownTokenProcessorITalic from './markdown-token-processors/Italic'
 import MarkdownTokenProcessorITalicAndBold from './markdown-token-processors/ItalicAndBold'
 import BlockquoteProcessor from './processors/Blockquote'
 import ListProcessor from './processors/List'
+import EofProcessor from './processors/Eof'
 
 export class Parser {
     private lexer = new Lexer()
@@ -24,6 +25,7 @@ export class Parser {
         new ParagraphProcessor(),
         new ComponentProcessor(),
         new BlockquoteProcessor(),
+        new EofProcessor(),
     ]
 
     private markdowTokenProcessors: MarkdownTokenProcessor[] = [

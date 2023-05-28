@@ -10,7 +10,7 @@
         a.value++
         b.value++
     }
-
+::
 
 ### Data
 
@@ -27,4 +27,4 @@ B: {{ b }}
     const page = usePage()
 
     btn.onClick(() => page.increment())
-
+::

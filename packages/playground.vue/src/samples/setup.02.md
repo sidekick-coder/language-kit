@@ -10,7 +10,7 @@
     function decrement(){
         count.value--
     }
-
+::
 
 ## Use count in heading {{ count }}
 
@@ -20,10 +20,10 @@ Use count in paragraph {{ count }}
     :label=`Increment ${count}`
     #color=green
     @click=increment
-
+::
 
 :: button
     :label=`Decrement ${count}`
     #color=red
     @click=decrement
-
+::
