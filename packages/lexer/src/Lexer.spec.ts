@@ -1,29 +1,33 @@
 import { describe, it, expect } from 'vitest'
 import { Lexer } from '../src/Lexer'
 import { Token } from '.'
+import TokenArray from './TokenArray'
 
 describe('lexer', () => {
     const lexer = new Lexer()
 
-    const files = import.meta.glob('./tests/fixtures/*.txt', {
-        eager: true,
-        as: 'raw',
+    it('should tokenize symbols', () => {
+        const payload = `!@#$%^&*()_+-=[]{};':",./<>?`
+
+        const result = lexer.tokenize(payload)
+
+        const tokens = new TokenArray()
+
+        payload.split('').forEach((char) => tokens.push(Token.symbol(char)))
+
+        tokens.push(Token.endOfFile())
+
+        tokens.setPositions()
+
+        expect(result).toEqual(tokens)
     })
 
-    it.each(Object.entries(files))('should tokenize fixtures %s', (filename, content) => {
-        const tokens = lexer.tokenize(content)
-
-        const length = tokens.reduce((acc, token) => acc + token.value.length, 0)
-
-        expect(lexer.tokenize(content)).toMatchSnapshot()
-
-        expect(length).toBe(content.length)
-    })
-
-    it('should correctly convert whitespaces', () => {
+    it('should tokenize text', () => {
         const tokens = lexer.tokenize('This is a **bold text** \n\n')
 
-        const expected = [
+        const expected = new TokenArray()
+
+        expected.push(
             Token.word('This'),
             Token.whiteSpace(),
             Token.word('is'),
@@ -40,8 +44,10 @@ describe('lexer', () => {
             Token.whiteSpace(),
             Token.breakLine(),
             Token.breakLine(),
-            Token.endOfFile(),
-        ]
+            Token.endOfFile()
+        )
+
+        expected.setPositions()
 
         expect(tokens).toEqual(expected)
     })

@@ -9,35 +9,62 @@ export enum TokenType {
 
 // TODO: add startIndex and endIndex
 export class Token {
-    public type: TokenType
+    public type: string
     public value: string
+    public start = 0
+    public end = 0
 
-    constructor(props: Token) {
-        this.type = props.type
-        this.value = props.value
+    public static from<T extends Token>(this: new (args: T) => T, type: string, value: string) {
+        const token = new this({} as T)
+
+        token.type = type
+        token.value = value
+
+        return token
     }
 
-    public static from(type: TokenType, value: string) {
-        return new Token({ type, value })
+    public static symbol<T extends Token>(this: new (args: T) => T, value: string) {
+        const token = new this({} as T)
+
+        token.type = TokenType.Symbol
+        token.value = value
+
+        return token
     }
 
-    public static symbol(value: string) {
-        return Token.from(TokenType.Symbol, value)
+    public static word<T extends Token>(this: new (args: T) => T, value: string) {
+        const token = new this({} as T)
+
+        token.type = TokenType.Word
+        token.value = value
+
+        return token
     }
 
-    public static word(value: string) {
-        return Token.from(TokenType.Word, value)
+    public static whiteSpace<T extends Token>(this: new (args: T) => T, value = ' ') {
+        const token = new this({} as T)
+
+        token.type = TokenType.WhiteSpace
+        token.value = value
+
+        return token
     }
 
-    public static whiteSpace(value = ' ') {
-        return Token.from(TokenType.WhiteSpace, value)
+    public static breakLine<T extends Token>(this: new (args: T) => T, value = '\n') {
+        const token = new this({} as T)
+
+        token.type = TokenType.BreakLine
+        token.value = value
+
+        return token
     }
 
-    public static breakLine() {
-        return Token.from(TokenType.BreakLine, '\n')
-    }
+    public static endOfFile<T extends Token>(this: new (args: T) => T) {
+        const token = new this({} as T)
 
-    public static endOfFile() {
-        return Token.from(TokenType.EndOfFile, '')
+        token.type = TokenType.EndOfFile
+        token.value = ''
+
+        return token
     }
 }
