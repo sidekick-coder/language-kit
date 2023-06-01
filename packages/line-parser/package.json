@@ -1,0 +1,39 @@
+{
+    "name": "@language-kit/line-parser",
+    "version": "0.0.1",
+    "description": "Sample usage of the language-kit package",
+    "author": "Henrique Oliveira <henriqueoliwork@gmail.com>",
+    "license": "MIT",
+    "homepage": "https://github.com/sidekick-coder/language-kit",
+    "keywords": [
+        "lexer",
+        "tokenizer",
+        "language",
+        "parser"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/sidekick-coder/language-kit.git"
+    },
+    "bugs": {
+        "url": "https://github.com/sidekick-coder/language-kit/issues"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "exports": {
+        ".": {
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "scripts": {
+        "test": "vitest",
+        "build": "tsup",
+        "sample": "tsx ./src/Sample.ts",
+        "dev": "tsup --watch",
+        "prepublishOnly": "npm run build",
+        "make:version": "npm version --no-git-tag-version"
+    }
+}
