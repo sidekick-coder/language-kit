@@ -28,7 +28,9 @@
     }
   },
   "scripts": {
-    "test": "vitest",
+    "test": "run-p test:*",
+    "test:unit": "vitest",
+    "test:tsc": "vitest typecheck",
     "build": "tsup",
     "dev": "tsup --watch",
     "prepublishOnly": "npm run build",

@@ -2,7 +2,7 @@ import type { LexerProcessor } from './LexerProcessor'
 import { Token, TokenType } from './Token'
 
 import { allProcessors } from './Processors'
-import TokenArray from './TokenArray'
+import { TokenArray } from './TokenArray'
 
 interface Options {
     includeEndOfFile?: boolean
@@ -12,11 +12,11 @@ const defaultOptions: Options = {
     includeEndOfFile: true,
 }
 
-export class Lexer {
+export class Lexer<T extends Token = Token> {
     public processors: LexerProcessor[] = allProcessors
 
     public tokenize(code: string, options: Options = defaultOptions) {
-        const tokens = new TokenArray()
+        const tokens = new TokenArray<T>()
 
         const chars = code.split('')
 
@@ -35,7 +35,7 @@ export class Lexer {
         }
 
         if (options.includeEndOfFile) {
-            tokens.push(Token.endOfFile())
+            tokens.push(Token.endOfFile() as T)
         }
 
         tokens.setPositions()

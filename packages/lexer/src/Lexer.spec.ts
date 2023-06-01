@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Lexer } from '../src/Lexer'
 import { Token } from '.'
-import TokenArray from './TokenArray'
+import { TokenArray } from './TokenArray'
 
 describe('lexer', () => {
     const lexer = new Lexer()

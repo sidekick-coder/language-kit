@@ -14,6 +14,8 @@ export class Token {
     public start = 0
     public end = 0
 
+    public static types = TokenType
+
     public static from<T extends Token>(this: new (args: T) => T, type: string, value: string) {
         const token = new this({} as T)
 

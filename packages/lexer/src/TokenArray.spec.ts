@@ -1,9 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { Lexer } from '../src/Lexer'
 import { Token } from '.'
-import TokenArray from './TokenArray'
+import { TokenArray } from './TokenArray'
 
-describe('lexer', () => {
+describe('TokenArray.ts', () => {
     it.each([
         [
             [Token.word('Hello'), Token.whiteSpace(), Token.word('word')],
@@ -55,5 +54,31 @@ describe('lexer', () => {
         const result = tokens.map((token) => [token.start, token.end])
 
         expect(result).toEqual(positions)
+    })
+
+    const methods = ['setPositions']
+
+    it('should slice() return an instance of TokenArray', () => {
+        const tokens = new TokenArray()
+
+        tokens.push(...[Token.word('Hello'), Token.whiteSpace(), Token.word('word')])
+
+        const result = tokens.slice(0, 1)
+
+        expect(result).toBeInstanceOf(TokenArray)
+
+        methods.forEach((method) => expect(result[method]).toBeDefined())
+    })
+
+    it('should map() return an instance of TokenArray', () => {
+        const tokens = new TokenArray()
+
+        tokens.push(...[Token.word('Hello'), Token.whiteSpace(), Token.word('word')])
+
+        const result = tokens.map((token) => token)
+
+        expect(result).toBeInstanceOf(TokenArray)
+
+        methods.forEach((method) => expect(result[method]).toBeDefined())
     })
 })
