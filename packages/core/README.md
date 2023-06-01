@@ -14,7 +14,7 @@ The goal of the lib is convert strings to an array of nodes.
 
 For this we need to define 3 entities: Nodes, Processors and a Parser
 
-## 1 - Define a nodes
+### 1 - Define a nodes
 
 First define nodes that the your language will have.
 
@@ -45,7 +45,7 @@ export class FirstLineNode extends BaseLineNode {
 }
 ```
 
-## 2 - Define Processor
+### 2 - Define Processor
 
 Next we have to create an processor to convert tokens to this nodes
 
@@ -88,7 +88,7 @@ export class LineProcessor extends BaseProcessor<BaseLineNode> {
 }
 
 ```
-## 3 - Define parser
+### 3 - Define parser
 
 Finally we can create an parser with the created classes
 
@@ -103,7 +103,7 @@ export class LineParser extends BaseParser<BaseLineNode> {
 
 ```
 
-## 4 - Parser string
+### 4 - Parser string
 
 Now we can parse any string and have an array of nodes representing the string
 
@@ -124,3 +124,55 @@ if (firstLine.isFirstLine()) {
 }
 
 ```
+
+## Documentation
+
+### Nodes
+
+Nodes are a representation of a group of tokens
+
+For example you can have a node for a whole line of the text, or for each tag html inside a text.
+
+The node of the language will always depend on the output you want
+
+> **Tip:** When defining Nodes is highly recommended have well defined **start** and an **end** patterns, this is to avoid problems and be more easy to implement your processor
+
+All custom nodes will be an instance of [BaseNode.ts](./src/BaseNode.ts), you can check the source file the know the methods and helpers that are available
+
+Examples markdown
+
+```md
+
+## Heading <!-- MarkdownHeadingNode -->
+
+**Heading** <!-- MarkdownTextBoldNode -->
+
+<div>Content</div> <!-- MarkdownHTMLNode -->
+```
+
+Examples javascript
+```js
+// JSVariableNode
+const count = 0 
+
+// JSFunctionNode
+function hello(){
+    //
+}
+
+// JSClassNode
+class Awesome {
+
+}
+```
+
+### NodesArray
+
+This is an class that extends the normal Array of Javascript.
+
+It have some extra helper methods like ```toText()``` method that convert a whole array nodes into text.
+
+And ``setPositions``` that update all nodes start and end positions
+
+You can check another methods and more about in the [NodesArray.ts](./src/NodeArray.ts) file
+
