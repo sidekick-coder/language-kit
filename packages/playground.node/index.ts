@@ -1,7 +1,7 @@
 console.log('Hello from the playground.node package')
 
 async function run() {
-    const files = ['lexer.mjs', 'markdown.mjs', 'core.mjs']
+    const files = ['lexer.ts', 'core.ts']
 
     for await (const file of files) {
         console.log(`-------------------- ${file} --------------------`)

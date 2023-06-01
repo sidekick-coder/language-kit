@@ -8,4 +8,4 @@ console.log(tokens)
 
 console.log(allProcessors)
 
-console.log(Token.fromSymbol('@'))
+console.log(Token.symbol('@'))

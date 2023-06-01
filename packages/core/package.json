@@ -1,0 +1,38 @@
+{
+    "name": "@language-kit/core",
+    "version": "0.0.1",
+    "description": "Base classes for parser strings into Nodes",
+    "author": "Henrique Oliveira <henriqueoliwork@gmail.com>",
+    "license": "MIT",
+    "homepage": "https://github.com/sidekick-coder/language-kit",
+    "keywords": [
+        "lexer",
+        "tokenizer",
+        "language",
+        "parser"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/sidekick-coder/language-kit.git"
+    },
+    "bugs": {
+        "url": "https://github.com/sidekick-coder/language-kit/issues"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "exports": {
+        ".": {
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "scripts": {
+        "test": "vitest",
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "prepublishOnly": "npm run build",
+        "make:version": "npm version --no-git-tag-version"
+    }
+}
