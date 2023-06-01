@@ -140,12 +140,13 @@ describe('Component processor', () => {
         expect(node.tokens).toEqual(expected.tokens)
     })
 
-    it('should process NodeComponent with events with attrs and props', () => {
+    it('should process NodeComponent with events, attrs, props and body', () => {
         const payload = [
             ':: button',
             '@click1="hello"',
             ':color="123"',
             '#data="hi"',
+            '',
             'Body of component',
             '::',
         ].join('\n')
