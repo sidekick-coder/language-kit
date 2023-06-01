@@ -23,7 +23,9 @@ export class BaseParser<N extends BaseNode = BaseNode, T extends Token = Token> 
     public toNodes(source: string, options?: ToNodeOptions) {
         let tokens = this.toTokens(source)
         let nodes = new NodeArray<N>()
-        const timeout = options?.timeout ?? 1000
+        const timeout = options?.timeout ?? 500
+
+        const now = Date.now()
 
         while (tokens.length) {
             const result = this.processors.find((processor) => {
@@ -40,6 +42,10 @@ export class BaseParser<N extends BaseNode = BaseNode, T extends Token = Token> 
 
                 return isProcessed
             })
+
+            if (Date.now() - now > timeout) {
+                throw new Error('Timeout on parsing string')
+            }
 
             if (result) continue
 
