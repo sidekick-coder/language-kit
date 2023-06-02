@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npm test -ws --if-present",
     "play": "npm -w @language-kit/playground.vue run dev",
-    "lint": "eslint . --ext .vue,.ts,.js --max-warnings 0"
+    "lint": "eslint . --ext .vue,.ts,.js --max-warnings 0",
+    "make:version": "tsx scripts/MakeVersion.ts"
   },
   "author": "Henrique Oliveira",
   "license": "MIT",
@@ -27,6 +28,9 @@
     "vitest": "^0.29.8"
   },
   "dependencies": {
-    "npm-run-all": "^4.1.5"
+    "@poppinss/cliui": "^3.0.5",
+    "@types/prompts": "^2.4.4",
+    "npm-run-all": "^4.1.5",
+    "prompts": "^2.4.2"
   }
 }
