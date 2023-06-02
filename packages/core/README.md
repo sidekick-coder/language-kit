@@ -1,4 +1,4 @@
-# Language-kit core
+# Language-kit core (beta)
 
 This package is a set of base classes to create language parsers.
 
@@ -165,14 +165,4 @@ class Awesome {
 
 }
 ```
-
-### NodesArray
-
-This is an class that extends the normal Array of Javascript.
-
-It have some extra helper methods like ```toText()``` method that convert a whole array nodes into text.
-
-And ``setPositions``` that update all nodes start and end positions
-
-You can check another methods and more about in the [NodesArray.ts](./src/NodeArray.ts) file
 

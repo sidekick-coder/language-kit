@@ -20,6 +20,8 @@ export class BaseParser<N extends BaseNode = BaseNode, T extends Token = Token> 
     }
 
     public toNodes(source: string, options?: ToNodeOptions) {
+        this.processors.sort((a, b) => a.order - b.order)
+
         let tokens = this.toTokens(source)
         let nodes = new NodeArray<N>()
         const timeout = options?.timeout ?? 500
