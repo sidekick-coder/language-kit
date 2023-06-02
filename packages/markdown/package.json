@@ -11,7 +11,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sidekick-coder/language-kit.git"
+    "url": "git+https://github.com/sidekick-coder/language-kit.git",
+    "directory": "packages/markdown"
   },
   "bugs": {
     "url": "https://github.com/sidekick-coder/language-kit/issues"
