@@ -1,6 +1,6 @@
 {
     "name": "@language-kit/core",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Base classes for parser strings into Nodes",
     "author": "Henrique Oliveira <henriqueoliwork@gmail.com>",
     "license": "MIT",
