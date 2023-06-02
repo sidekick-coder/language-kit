@@ -61,7 +61,7 @@ async function run() {
     logger.info('Creating commit', 'git')
 
     await execAsync(`git add ${resolve(packagePath, 'package.json')}`)
-    await execAsync(`git commit -m "feat: v${options.package}"`)
+    await execAsync(`git commit -m "feat(${options.package}): v${json.version}"`)
 
     logger.info(message, 'git')
 }
