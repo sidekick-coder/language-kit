@@ -55,6 +55,8 @@ export class BaseParser<N extends BaseNode = BaseNode, T extends Token = Token> 
             tokens.shift()
         }
 
+        nodes.setPositions()
+
         return nodes
     }
 }
