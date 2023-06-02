@@ -7,7 +7,8 @@
     "test": "npm test -ws --if-present",
     "play": "npm -w @language-kit/playground.vue run dev",
     "lint": "eslint . --ext .vue,.ts,.js --max-warnings 0",
-    "make:version": "tsx scripts/MakeVersion.ts"
+    "make:version": "tsx scripts/MakeVersion.ts",
+    "make:publication": "tsx scripts/MakePublication.ts"
   },
   "author": "Henrique Oliveira",
   "license": "MIT",
