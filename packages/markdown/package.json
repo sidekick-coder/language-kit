@@ -34,6 +34,7 @@
     "make:version": "npm version --no-git-tag-version"
   },
   "dependencies": {
+    "@language-kit/core": "^0.0.1",
     "@language-kit/lexer": "^1.0.5"
   }
 }
