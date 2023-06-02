@@ -11,7 +11,7 @@ export enum MarkdownNodeNodeType {
 }
 
 export class MarkdownNode extends BaseNode {
-    public type: MarkdownNodeNodeType = MarkdownNodeNodeType.Unknown
+    public type: string = MarkdownNodeNodeType.Unknown
 
     public static types = MarkdownNodeNodeType
 

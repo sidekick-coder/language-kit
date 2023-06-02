@@ -1,4 +1,4 @@
-# @language-kit/lexer
+# @language-kit/lexer (beta)
 
 This package convert strings to tokens.
 

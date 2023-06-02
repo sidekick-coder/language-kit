@@ -1,7 +1,8 @@
 {
   "name": "@language-kit/playground.node",
   "scripts": {
-    "start": "node index.mjs",
+    "start": "run-p start:*",
+    "start:js": "node index.mjs",
     "start:ts": "tsx index.ts"
   },
   "dependencies": {

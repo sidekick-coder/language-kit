@@ -1,11 +1,11 @@
-import { Parser } from '@language-kit/markdown'
+// import { Parser } from '@language-kit/markdown'
 
-import utils from 'util'
+// import utils from 'util'
 
-const parser = new Parser()
+// const parser = new Parser()
 
-const text = ['# Heading', '', 'Paragraph.'].join('\n')
+// const text = ['# Heading', '', 'Paragraph.'].join('\n')
 
-const nodes = parser.toNodes(text)
+// const nodes = parser.toNodes(text)
 
-console.log(utils.inspect(nodes, { depth: null }))
+// console.log(utils.inspect(nodes, { depth: null }))

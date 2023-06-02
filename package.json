@@ -6,6 +6,7 @@
   "scripts": {
     "test": "npm test -ws --if-present",
     "play": "npm -w @language-kit/playground.vue run dev",
+    "play:node": "npm -w @language-kit/playground.node run start",
     "lint": "eslint . --ext .vue,.ts,.js --max-warnings 0",
     "make:version": "tsx scripts/MakeVersion.ts",
     "make:publication": "tsx scripts/MakePublication.ts"
