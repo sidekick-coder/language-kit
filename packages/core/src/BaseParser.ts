@@ -1,4 +1,4 @@
-import { Lexer, Token, TokenArray } from '@language-kit/lexer'
+import { Lexer, Token, TokenArray, LexerTokenizeOptions } from '@language-kit/lexer'
 import { BaseNode } from './BaseNode'
 import { BaseProcessor } from './BaseProcessor'
 import { NodeArray } from './NodeArray'
@@ -15,8 +15,8 @@ export class BaseParser<N extends BaseNode = BaseNode, T extends Token = Token> 
         this.processors.push(processor)
     }
 
-    public toTokens(source: string): TokenArray<T> {
-        return this.lexer.tokenize(source)
+    public toTokens(source: string, options?: LexerTokenizeOptions): TokenArray<T> {
+        return this.lexer.tokenize(source, options)
     }
 
     public toNodes(source: string, options?: ToNodeOptions) {
