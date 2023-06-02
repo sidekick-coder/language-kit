@@ -34,5 +34,8 @@
         "dev": "tsup --watch",
         "prepublishOnly": "npm run build",
         "make:version": "npm version --no-git-tag-version"
+    },
+    "dependencies": {
+        "@language-kit/lexer": "^1.1.0"
     }
 }
