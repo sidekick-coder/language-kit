@@ -1,6 +1,6 @@
 import { Token, TokenType } from './Token'
 
-export class TokenArray<T extends Token> extends Array<T> {
+export class TokenArray<T extends Token = Token> extends Array<T> {
     public setPositions() {
         let position = 0
 
@@ -31,5 +31,21 @@ export class TokenArray<T extends Token> extends Array<T> {
     ): TokenArray<T>
     public filter(predicate: unknown, thisArg?: unknown): TokenArray<T> {
         return new TokenArray(...super.filter(predicate as any, thisArg))
+    }
+
+    /**
+     * Make a loop over the tokens and return the value joined.
+     * @returns string
+     * @example
+     * const tokens = new TokenArray(
+     *      new Token(TokenType.Text, 'Hello'),
+     *      new Token(TokenType.Text, ' '),
+     *      new Token(TokenType.Text, 'world'),
+     * )     *
+     * tokens.toText() // Hello world
+     */
+
+    public toText() {
+        return this.map((t) => t.value).join('')
     }
 }

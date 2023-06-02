@@ -1,21 +1,32 @@
 import type { LexerProcessor } from './LexerProcessor'
-import { Token, TokenType } from './Token'
+import { Token } from './Token'
 
 import { allProcessors } from './Processors'
 import { TokenArray } from './TokenArray'
 
-interface Options {
-    includeEndOfFile?: boolean
+export interface LexerTokenizeOptions {
+    includeEndOfFileToken?: boolean
 }
 
-const defaultOptions: Options = {
-    includeEndOfFile: true,
+const defaultOptions: LexerTokenizeOptions = {
+    includeEndOfFileToken: true,
 }
 
 export class Lexer<T extends Token = Token> {
     public processors: LexerProcessor[] = allProcessors
 
-    public tokenize(code: string, options: Options = defaultOptions) {
+    /**
+     * Tokenize a string of code
+     * @param code
+     * @param options
+     * @returns A TokenArray
+     * @example
+     * ```ts
+     * const lexer = new Lexer()
+     * const tokens = lexer.tokenize('1 + 1')
+     * ```
+     */
+    public tokenize(code: string, options: LexerTokenizeOptions = defaultOptions) {
         const tokens = new TokenArray<T>()
 
         const chars = code.split('')
@@ -34,7 +45,7 @@ export class Lexer<T extends Token = Token> {
             chars.shift()
         }
 
-        if (options.includeEndOfFile) {
+        if (options.includeEndOfFileToken) {
             tokens.push(Token.endOfFile() as T)
         }
 
