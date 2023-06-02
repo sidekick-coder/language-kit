@@ -53,7 +53,7 @@ async function run() {
             command.stderr?.on('data', (data) => {
                 data.toString()
                     .split('\n')
-                    .forEach((line: string) => logger.error(line))
+                    .forEach((line: string) => logger.info(line))
             })
 
             command.on('error', (error) => task.fail(error))
@@ -67,27 +67,6 @@ async function run() {
     })
 
     await runtime.run()
-
-    // logger.info('Generating version', 'npm')
-
-    // const packagePath = resolve(BASE_PATH, 'packages', options.package)
-
-    // await execAsync(`npm version ${options.version} --no-git-tag-version`, {
-    //     cwd: packagePath,
-    // })
-
-    // const json = await findPackageJson(options.package)
-
-    // logger.info(json.version, 'npm')
-
-    // const message = `feat: v${json.version}`
-
-    // logger.info('Creating commit', 'git')
-
-    // await execAsync(`git add ${resolve(packagePath, 'package.json')}`)
-    // await execAsync(`git commit -m "feat(${options.package}): v${json.version}"`)
-
-    // logger.info(message, 'git')
 }
 
 run().catch((e) => {

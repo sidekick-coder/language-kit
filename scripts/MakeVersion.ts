@@ -2,7 +2,7 @@ import { readFile } from 'fs/promises'
 import { resolve } from 'path'
 import { exec } from 'child_process'
 import { promisify } from 'util'
-import { logger } from '@poppinss/cliui'
+import { tasks } from '@poppinss/cliui'
 
 import prompts from 'prompts'
 
@@ -23,9 +23,9 @@ async function findPackageJson(packageName: string) {
 async function run() {
     const options = await prompts([
         {
-            name: 'package',
-            type: 'select',
-            message: 'Select package',
+            name: 'packages',
+            type: 'multiselect',
+            message: 'Select packages',
             choices: [
                 { title: 'Lexer', value: 'lexer' },
                 { title: 'Core', value: 'core' },
@@ -44,26 +44,36 @@ async function run() {
         },
     ])
 
-    logger.info('Generating version', 'npm')
+    const runtime = tasks.verbose()
 
-    const packagePath = resolve(BASE_PATH, 'packages', options.package)
+    options.packages.forEach((name: string) => {
+        runtime.add(name, async (logger, task) => {
+            logger.info('Generating version', 'npm')
 
-    await execAsync(`npm version ${options.version} --no-git-tag-version`, {
-        cwd: packagePath,
+            const packagePath = resolve(BASE_PATH, 'packages', name)
+
+            await execAsync(`npm version ${options.version} --no-git-tag-version`, {
+                cwd: packagePath,
+            })
+
+            const json = await findPackageJson(name)
+
+            logger.info(json.version, 'npm')
+
+            const message = `feat: v${json.version}`
+
+            logger.info('Creating commit', 'git')
+
+            await execAsync(`git add ${resolve(packagePath, 'package.json')}`)
+            await execAsync(`git commit -m "feat(${name}): v${json.version}"`)
+
+            logger.info(message, 'git')
+
+            task.complete()
+        })
     })
 
-    const json = await findPackageJson(options.package)
-
-    logger.info(json.version, 'npm')
-
-    const message = `feat: v${json.version}`
-
-    logger.info('Creating commit', 'git')
-
-    await execAsync(`git add ${resolve(packagePath, 'package.json')}`)
-    await execAsync(`git commit -m "feat(${options.package}): v${json.version}"`)
-
-    logger.info(message, 'git')
+    await runtime.run()
 }
 
 run().catch((e) => {
