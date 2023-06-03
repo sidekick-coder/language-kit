@@ -1,6 +1,6 @@
 {
   "name": "@language-kit/markdown",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Parser and process markdown strings",
   "author": "Henrique Oliveira <henriqueoliwork@gmail.com>",
   "license": "MIT",
@@ -36,6 +36,6 @@
   },
   "dependencies": {
     "@language-kit/core": "^0.0.4",
-    "@language-kit/lexer": "^1.1.2"
+    "@language-kit/lexer": "^1.1.3"
   }
 }
