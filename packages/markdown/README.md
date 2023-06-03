@@ -1,9 +1,21 @@
 # Language-kit markdown (beta)
 
+## Overview
+
 This package convert strings to markdown nodes.
 
 > Alert: child nodes not supported yet!
 
+## Table of contents
+
+- [Installation](#install)
+- [Simple usage](#simple-usage)
+- [Advanced usage](#advance-usage)
+- [Support the project](#support-the-development)
+- [Classes & interfaces](#classes--interfaces)
+  - [MarkdownNodeHeading](#markdownnodeheading)
+  - [MarkdownNodeParagraph](#markdownnodeparagraph)
+  - [MarkdownNodeComponent](#markdownnodecomponent)
 ## Install
 
 ```bash
@@ -96,8 +108,13 @@ first // MarkdownNode { type: 'HelloNode', tokens: [ ... ] }
 second // MarkdownNode { type: 'Paragraph', tokens: [ ... ] }
 
 ```
+## Support the development
 
-## Nodes
+Suggestions and issues are welcome
+
+And for financial support you can check my: [Github sponsor link](https://github.com/sponsors/zzhenryquezz)
+
+## Classes & Interfaces
 
 You can check a list of available types in [MarkdownNode.ts](./src/MarkdownNode.ts) file
 ### MarkdownNodeHeading
@@ -206,3 +223,4 @@ Output
 [MarkdownNodeParagraph]
 [MarkdownNodeParagraph]
 ```
+
