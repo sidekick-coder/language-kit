@@ -1,7 +1,5 @@
 import { readFile } from 'fs/promises'
 import { resolve } from 'path'
-import { exec } from 'child_process'
-import { promisify } from 'util'
 import { tasks } from '@poppinss/cliui'
 
 import upperFirst from 'lodash/upperFirst'
@@ -148,12 +146,13 @@ async function run() {
                 // 5 minutes
                 const timeout = 1000 * 60 * 5
 
-                const filename = resolve(entry.path, 'package.json')
+                const packageJSONFilename = resolve(entry.path, 'package.json')
+                const rootPackageLockJSONFilename = resolve(BASE_PATH, 'package-lock.json')
 
                 const json = await findPackageJson(entry.name)
 
                 const commands = [
-                    `git add ${filename}`,
+                    `git add ${packageJSONFilename} ${rootPackageLockJSONFilename}`,
                     `git commit -m "feat(${entry.name}): v${json.version}"`,
                 ]
 
@@ -196,48 +195,6 @@ async function run() {
             await task.complete()
         })
     }
-
-    // Object.entries(packages)
-    //     .filter(([name]) => options.packages.includes(name))
-    //     .forEach(([name, { dependencies }]) => {
-    //         runtime.add(name, async (logger, task) => {
-    //             const packagePath = resolve(BASE_PATH, 'packages', name)
-
-    //             const log = (data: string, prefix?: string) => {
-    //                 data.split('\n').forEach((l: string) => logger.info(l, prefix))
-    //             }
-
-    //
-
-    //             await new Command(`npm version ${options.version} --no-git-tag-version`, {
-    //                 cwd: packagePath,
-    //             })
-    //                 .onStdout(log)
-    //                 .onStderr(log)
-    //                 .onEnd()
-
-    //             if (options.commitChanges) {
-    //                 const json = await findPackageJson(name)
-    //                 logger.info(json.version, 'npm')
-
-    //                 const message = `feat: v${json.version}`
-
-    //                 logger.info('Creating commit', 'git')
-
-    //                 await new Command(`git add ${resolve(packagePath, 'package.json')}`).onEnd()
-
-    //                 await new Command(`git commit -m "${message}"`).onEnd()
-
-    //                 logger.info(message, 'git')
-    //             }
-
-    //             if (options.publishVersion) {
-    //                 // publish
-    //             }
-
-    //             task.complete()
-    //         })
-    //     })
 
     await runtime.run()
 }
