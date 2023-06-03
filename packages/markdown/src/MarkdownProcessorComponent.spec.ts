@@ -13,6 +13,9 @@ describe('MarkdownProcessorComponent', () => {
 
         const node = new MarkdownNodeComponent()
 
+        node.start = 0
+        node.end = payload.length - 1
+
         node.tokens = parser.toTokens(payload, {
             includeEndOfFileToken: false,
         })
@@ -37,6 +40,9 @@ describe('MarkdownProcessorComponent', () => {
         const result = parser.toNodes(payload)
 
         const node = new MarkdownNodeComponent()
+
+        node.start = 0
+        node.end = payload.length - 1
 
         node.tokens = parser.toTokens(payload, {
             includeEndOfFileToken: false,
@@ -73,6 +79,9 @@ describe('MarkdownProcessorComponent', () => {
         const result = parser.toNodes(payload)
 
         const node = new MarkdownNodeComponent()
+
+        node.start = 0
+        node.end = payload.length - 1
 
         node.tokens = parser.toTokens(payload, {
             includeEndOfFileToken: false,

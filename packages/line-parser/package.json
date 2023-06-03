@@ -29,7 +29,6 @@
         }
     },
     "scripts": {
-        "test": "vitest",
         "build": "tsup",
         "sample": "tsx ./src/Sample.ts",
         "dev": "tsup --watch",

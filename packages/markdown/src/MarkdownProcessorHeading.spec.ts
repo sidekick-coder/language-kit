@@ -13,6 +13,9 @@ describe('MarkdownProcessorHeading', () => {
 
         const node = new MarkdownNodeHeading()
 
+        node.start = 0
+        node.end = payload.length - 1
+
         node.tokens = parser.toTokens(payload)
 
         expect(result).toEqual([node])
