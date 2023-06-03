@@ -176,7 +176,7 @@ async function run() {
     }
 
     if (options.publishVersion) {
-        runtime.add('Commit changes', async (logger, task) => {
+        runtime.add('Publishing', async (logger, task) => {
             logger.log(upperFirst(name))
 
             // 5 minutes
@@ -191,7 +191,7 @@ async function run() {
                 .onStderr((data) => subLogs(logger, data, 'npm'))
                 .onEnd()
 
-            logger.success('Commit created')
+            logger.success('Published')
 
             await task.complete()
         })
