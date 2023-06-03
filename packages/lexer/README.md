@@ -1,6 +1,6 @@
 # @language-kit/lexer (beta)
 
-This package convert strings to tokens.
+A package to convert strings to tokens.
 
 ## Install
 
@@ -26,3 +26,9 @@ const tokens = lexer.tokenize('1 + 2')
   Token { type: 'EndOfFile', value: '' }
 ]
 ```
+
+## Support the development
+
+Suggestions and issues are welcome
+
+And for financial support you can check my: [Github sponsor link](https://github.com/sponsors/zzhenryquezz)
