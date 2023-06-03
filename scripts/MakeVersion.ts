@@ -45,8 +45,8 @@ async function run() {
     const options = await prompts([
         {
             name: 'packages',
-            type: 'multiselect',
-            message: 'Select packages',
+            type: 'select',
+            message: 'Select package',
             choices: packages.map(({ name }) => ({ title: name, value: name })),
         },
         {
@@ -81,7 +81,11 @@ async function run() {
 
     const runtime = tasks.verbose()
 
-    const selectedPackages = packages.filter(({ name }) => options.packages.includes(name))
+    const selectedPackage = packages.find(({ name }) => name === options.packages)
+
+    if (!selectedPackage) return
+
+    const { dependencies, path, name, fullName } = selectedPackage
 
     const subLogs = (logger: Logger, data: string, prefix?: string) => {
         data.split('\n').forEach((l: string) => logger.info(l, prefix))
@@ -89,84 +93,83 @@ async function run() {
 
     if (options.updateDependencies) {
         runtime.add('Update dependencies', async (logger, task) => {
-            for await (const entry of selectedPackages) {
-                logger.log(upperFirst(entry.name))
+            logger.log(upperFirst(name))
 
-                if (!entry.dependencies.length) {
-                    logger.warning('No dependencies to update')
-                    continue
-                }
+            if (!selectedPackage.dependencies.length) {
+                logger.warning('No dependencies to update')
+                return task.complete()
+            }
 
-                const value = `npm -w ${entry.fullName} install ${entry.dependencies.join(' ')}`
+            // 5 minutes
+            const timeout = 1000 * 60 * 5
 
-                logger.info(value, 'npm')
+            const commands = [
+                `npm -w ${fullName} un ${dependencies.join(' ')}`,
+                `npm -w ${fullName} i ${dependencies.join(' ')}`,
+            ]
 
-                // 5 minutes
-                const timeout = 1000 * 60 * 5
+            for await (const command of commands) {
+                logger.info(command, 'npm')
 
-                await new Command(value, { cwd: BASE_PATH }, timeout)
+                await new Command(command, { cwd: BASE_PATH }, timeout)
                     .onStdout((data) => subLogs(logger, data, 'npm'))
                     .onStderr((data) => subLogs(logger, data, 'npm'))
                     .onEnd()
-
-                logger.success('Dependencies updated')
             }
+
+            logger.success('Dependencies updated')
 
             await task.complete()
         })
     }
 
-    runtime.add('Update versions', async (logger, task) => {
-        for await (const entry of selectedPackages) {
-            logger.log(upperFirst(entry.name))
+    runtime.add('Update version', async (logger, task) => {
+        logger.log(upperFirst(name))
 
-            const value = `npm -w ${entry.fullName} version ${options.version} --no-git-tag-version`
+        const value = `npm -w ${fullName} version ${options.version} --no-git-tag-version`
 
-            logger.info(value, 'npm')
+        logger.info(value, 'npm')
 
-            // 5 minutes
-            const timeout = 1000 * 60 * 5
+        // 5 minutes
+        const timeout = 1000 * 60 * 5
 
-            await new Command(value, { cwd: BASE_PATH }, timeout)
-                .onStdout((data) => subLogs(logger, data, 'npm'))
-                .onStderr((data) => subLogs(logger, data, 'npm'))
-                .onEnd()
+        await new Command(value, { cwd: BASE_PATH }, timeout)
+            .onStdout((data) => subLogs(logger, data, 'npm'))
+            .onStderr((data) => subLogs(logger, data, 'npm'))
+            .onEnd()
 
-            logger.success('Version updated')
-        }
+        logger.success('Version updated')
 
         await task.complete()
     })
 
     if (options.commitChanges) {
         runtime.add('Commit changes', async (logger, task) => {
-            for await (const entry of selectedPackages) {
-                logger.log(upperFirst(entry.name))
+            logger.log(upperFirst(name))
 
-                // 5 minutes
-                const timeout = 1000 * 60 * 5
+            // 5 minutes
+            const timeout = 1000 * 60 * 5
 
-                const packageJSONFilename = resolve(entry.path, 'package.json')
-                const rootPackageLockJSONFilename = resolve(BASE_PATH, 'package-lock.json')
+            const packageJSONFilename = resolve(path, 'package.json')
+            const rootPackageLockJSONFilename = resolve(BASE_PATH, 'package-lock.json')
 
-                const json = await findPackageJson(entry.name)
+            const json = await findPackageJson(name)
 
-                const commands = [
-                    `git add ${packageJSONFilename} ${rootPackageLockJSONFilename}`,
-                    `git commit -m "feat(${entry.name}): v${json.version}"`,
-                ]
+            const commands = [
+                `git add ${packageJSONFilename} ${rootPackageLockJSONFilename}`,
+                `git commit -m "feat(${name}): v${json.version}"`,
+            ]
 
-                for await (const command of commands) {
-                    logger.info(command, 'git')
+            for await (const command of commands) {
+                logger.info(command, 'git')
 
-                    await new Command(command, { cwd: BASE_PATH }, timeout)
-                        .onStdout((data) => subLogs(logger, data, 'git'))
-                        .onStderr((data) => subLogs(logger, data, 'git'))
-                        .onEnd()
-                }
-
-                logger.success('Commit created')
+                await new Command(command, { cwd: BASE_PATH }, timeout)
+                    .onStdout((data) => subLogs(logger, data, 'git'))
+                    .onStderr((data) => subLogs(logger, data, 'git'))
+                    .onEnd()
             }
+
+            logger.success('Commit created')
 
             await task.complete()
         })
@@ -174,23 +177,21 @@ async function run() {
 
     if (options.publishVersion) {
         runtime.add('Commit changes', async (logger, task) => {
-            for await (const entry of selectedPackages) {
-                logger.log(upperFirst(entry.name))
+            logger.log(upperFirst(name))
 
-                // 5 minutes
-                const timeout = 1000 * 60 * 5
+            // 5 minutes
+            const timeout = 1000 * 60 * 5
 
-                const value = `npm -w ${entry.fullName} publish`
+            const value = `npm -w ${fullName} publish`
 
-                logger.info(value, 'npm')
+            logger.info(value, 'npm')
 
-                await new Command(value, { cwd: BASE_PATH }, timeout)
-                    .onStdout((data) => subLogs(logger, data, 'npm'))
-                    .onStderr((data) => subLogs(logger, data, 'npm'))
-                    .onEnd()
+            await new Command(value, { cwd: BASE_PATH }, timeout)
+                .onStdout((data) => subLogs(logger, data, 'npm'))
+                .onStderr((data) => subLogs(logger, data, 'npm'))
+                .onEnd()
 
-                logger.success('Commit created')
-            }
+            logger.success('Commit created')
 
             await task.complete()
         })
