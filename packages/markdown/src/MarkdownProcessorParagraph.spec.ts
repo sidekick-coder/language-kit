@@ -21,7 +21,7 @@ describe('MarkdownProcessorParagraph', () => {
 
         expect(result.length, 'Should return only one node').toBe(1)
 
-        expect(result).toEqual([node])
+        expect(result[0]).toEqual(node)
     })
 
     it('should not transform text component in paragraph', () => {
