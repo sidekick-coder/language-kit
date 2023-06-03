@@ -2,13 +2,21 @@
 
 This package is a set of base classes to create language parsers.
 
+## Table of contents
+
+- [Installation](#install)
+- [Simple usage](#simple-usage)
+- [Support the project](#support-the-development)
+- [Classes & interfaces](#classes--interfaces)
+  - [BaseNode](#basenode)
+
 ## Install
 
 ```bash
 npm install @language-kit/core
 ```
 
-## Usage
+## Simple Usage
 
 The goal of the lib is convert strings to an array of nodes.
 
@@ -124,10 +132,14 @@ if (firstLine.isFirstLine()) {
 }
 
 ```
+## Support the development
 
-## Documentation
+Suggestions and issues are welcome
 
-### Nodes
+And for financial support you can check my: [Github sponsor link](https://github.com/sponsors/zzhenryquezz)
+## Classes & interfaces
+
+### BaseNode
 
 Nodes are a representation of a group of tokens
 
@@ -166,3 +178,8 @@ class Awesome {
 }
 ```
 
+## Support the development
+
+Suggestions and issues are welcome
+
+And for financial support you can check my: [Github sponsor link](https://github.com/sponsors/zzhenryquezz)
