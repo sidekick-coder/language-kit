@@ -6,11 +6,11 @@ import { NodeArray } from './NodeArray'
 describe('NodeArray', () => {
     const lexer = new Lexer()
 
-    function createNode(value: string) {
+    function createNode(value: string, eof = false) {
         const node = new BaseNode()
 
         node.tokens = lexer.tokenize(value, {
-            includeEndOfFile: false,
+            includeEndOfFileToken: eof,
         })
 
         return node
@@ -42,5 +42,25 @@ describe('NodeArray', () => {
             [10, 10],
             [11, 19],
         ])
+    })
+
+    it('should handle start and end position when have eof', () => {
+        const nodes = new NodeArray(
+            createNode('First line'),
+            createNode('\n'),
+            createNode('last line', true)
+        )
+
+        nodes.setPositions()
+
+        const positions = nodes.map((node) => [node.start, node.end])
+
+        expect(positions).toEqual([
+            [0, 9],
+            [10, 10],
+            [11, 19],
+        ])
+
+        expect(nodes.at(-1).tokens.at(-1).type, 'should have eof token').toBe(Token.types.EndOfFile)
     })
 })
