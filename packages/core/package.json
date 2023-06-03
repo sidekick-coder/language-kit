@@ -1,6 +1,6 @@
 {
     "name": "@language-kit/core",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "Base classes for parser strings into Nodes",
     "author": "Henrique Oliveira <henriqueoliwork@gmail.com>",
     "license": "MIT",
@@ -37,6 +37,6 @@
         "make:version": "npm version --no-git-tag-version"
     },
     "dependencies": {
-        "@language-kit/lexer": "^1.1.2"
+        "@language-kit/lexer": "^1.1.3"
     }
 }
