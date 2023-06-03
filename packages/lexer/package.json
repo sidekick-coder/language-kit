@@ -1,6 +1,6 @@
 {
   "name": "@language-kit/lexer",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Transforms a string into a list of tokens",
   "author": "Henrique Oliveira <henriqueoliwork@gmail.com>",
   "license": "MIT",
