@@ -93,8 +93,6 @@ async function run() {
 
     if (options.updateDependencies) {
         runtime.add('Update dependencies', async (logger, task) => {
-            logger.log(upperFirst(name))
-
             if (!selectedPackage.dependencies.length) {
                 logger.warning('No dependencies to update')
                 return task.complete()
@@ -124,8 +122,6 @@ async function run() {
     }
 
     runtime.add('Update version', async (logger, task) => {
-        logger.log(upperFirst(name))
-
         const value = `npm -w ${fullName} version ${options.version} --no-git-tag-version`
 
         logger.info(value, 'npm')
@@ -145,8 +141,6 @@ async function run() {
 
     if (options.commitChanges) {
         runtime.add('Commit changes', async (logger, task) => {
-            logger.log(upperFirst(name))
-
             // 5 minutes
             const timeout = 1000 * 60 * 5
 
@@ -177,8 +171,6 @@ async function run() {
 
     if (options.publishVersion) {
         runtime.add('Publishing', async (logger, task) => {
-            logger.log(upperFirst(name))
-
             // 5 minutes
             const timeout = 1000 * 60 * 5
 
