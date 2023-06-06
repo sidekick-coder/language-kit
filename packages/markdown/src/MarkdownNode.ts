@@ -1,13 +1,25 @@
 import { BaseNode } from '@language-kit/core'
 import { MarkdownNodeComponent } from './MarkdownNodeComponent'
+import { MarkdownNodeTextBold } from './MarkdownNodeTextBold'
+import { MarkdownNodeParagraph } from './MarkdownNodeParagraph'
+import { MarkdownNodeHeading } from './MarkdownNodeHeading'
 
 export enum MarkdownNodeNodeType {
     Unknown = 'unknown',
     Paragraph = 'paragraph',
     Heading = 'heading',
     Component = 'component',
-    Blockquote = 'blockquote',
-    List = 'list',
+    TextBold = 'text-bold',
+}
+
+interface Teste {
+    [MarkdownNodeNodeType.Unknown]: MarkdownNode
+    [MarkdownNodeNodeType.Paragraph]: MarkdownNodeParagraph
+    [MarkdownNodeNodeType.Heading]: MarkdownNodeHeading
+    [MarkdownNodeNodeType.Component]: MarkdownNodeComponent
+    [MarkdownNodeNodeType.TextBold]: MarkdownNodeTextBold
+    // all other types are MarkdownNode
+    [key: string]: MarkdownNode
 }
 
 export class MarkdownNode extends BaseNode {
@@ -15,7 +27,7 @@ export class MarkdownNode extends BaseNode {
 
     public static types = MarkdownNodeNodeType
 
-    public isComponent(): this is MarkdownNodeComponent {
-        return this.type === MarkdownNodeNodeType.Component
+    public is<K extends keyof Teste>(type: K): this is Teste[K] {
+        return this.type === type
     }
 }

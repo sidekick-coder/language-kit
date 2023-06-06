@@ -1,4 +1,3 @@
-import { Token } from '@language-kit/lexer'
 import { MarkdownNodeParagraph } from './MarkdownNodeParagraph'
 import { MarkdownProcessor } from './MarkdownProcessor'
 
