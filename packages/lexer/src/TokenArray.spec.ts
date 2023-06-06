@@ -81,4 +81,18 @@ describe('TokenArray.ts', () => {
 
         methods.forEach((method) => expect(result[method]).toBeDefined())
     })
+
+    it('should set start and end position based on start argument', () => {
+        const tokens = new TokenArray(Token.word('Hello'), Token.whiteSpace(), Token.word('word'))
+
+        tokens.setPositions(10)
+
+        const positions = tokens.map((node) => [node.start, node.end])
+
+        expect(positions).toEqual([
+            [10, 14],
+            [15, 15],
+            [16, 19],
+        ])
+    })
 })

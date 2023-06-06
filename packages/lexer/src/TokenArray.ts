@@ -1,8 +1,8 @@
 import { Token, TokenType } from './Token'
 
 export class TokenArray<T extends Token = Token> extends Array<T> {
-    public setPositions() {
-        let position = 0
+    public setPositions(start = 0) {
+        let position = start
 
         this.forEach((token) => {
             if (token.type === TokenType.EndOfFile) {
