@@ -63,4 +63,22 @@ describe('NodeArray', () => {
 
         expect(nodes.at(-1).tokens.at(-1).type, 'should have eof token').toBe(Token.types.EndOfFile)
     })
+
+    it('should set start and end position based on start agr', () => {
+        const nodes = new NodeArray(
+            createNode('First line'),
+            createNode('\n'),
+            createNode('last line')
+        )
+
+        nodes.setPositions(10)
+
+        const positions = nodes.map((node) => [node.start, node.end])
+
+        expect(positions).toEqual([
+            [10, 19],
+            [20, 20],
+            [21, 29],
+        ])
+    })
 })

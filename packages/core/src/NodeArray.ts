@@ -2,30 +2,17 @@ import { Token } from '@language-kit/lexer'
 import { BaseNode } from './BaseNode'
 
 export class NodeArray<N extends BaseNode = BaseNode> extends Array<N> {
-    public setTokenPositions() {
-        let start = 0
+    public setPositions(start = 0) {
+        let position = start
 
         this.forEach((node) => {
-            let startNode = start
+            node.tokens.setPositions(position)
 
-            node.tokens.forEach((token) => {
-                if (token.type === Token.types.EndOfFile) {
-                    token.start = -1
-                    token.end = -1
-                    return
-                }
+            const last = node.tokens.at(-1)
 
-                token.start = startNode
-                token.end = startNode + token.value.length - 1
-
-                startNode = token.end + 1
-            })
-
-            start = startNode
+            position = last ? last.end + 1 : position
         })
-    }
 
-    public setNodePositions() {
         this.forEach((node) => {
             const first = node.tokens[0]
             let last = node.tokens.at(-1)
@@ -39,11 +26,6 @@ export class NodeArray<N extends BaseNode = BaseNode> extends Array<N> {
             node.start = first.start
             node.end = last.end
         })
-    }
-
-    public setPositions() {
-        this.setTokenPositions()
-        this.setNodePositions()
     }
 
     public toText() {
