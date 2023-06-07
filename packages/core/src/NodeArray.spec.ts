@@ -1,4 +1,4 @@
-import { Lexer, Token, TokenArray } from '@language-kit/lexer'
+import { Lexer } from '@language-kit/lexer'
 import { describe, it, expect } from 'vitest'
 import { BaseNode } from './BaseNode'
 import { NodeArray } from './NodeArray'

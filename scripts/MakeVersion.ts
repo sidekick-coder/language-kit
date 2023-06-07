@@ -2,8 +2,6 @@ import { readFile } from 'fs/promises'
 import { resolve } from 'path'
 import { tasks } from '@poppinss/cliui'
 
-import upperFirst from 'lodash/upperFirst'
-
 import prompts from 'prompts'
 import { Command } from './Command'
 import { Logger } from '@poppinss/cliui/build/src/Logger'
