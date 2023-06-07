@@ -2,6 +2,8 @@ import { MarkdownNodeParagraph } from './MarkdownNodeParagraph'
 import { MarkdownProcessor } from './MarkdownProcessor'
 
 export class MarkdownProcessorParagraph extends MarkdownProcessor {
+    public order = 20
+
     public process() {
         const endLineIndex = this.findEndLineIndex()
 

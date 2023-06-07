@@ -2,6 +2,8 @@ import { MarkdownProcessor } from './MarkdownProcessor'
 import { MarkdownNodeTextBold } from './MarkdownNodeTextBold'
 
 export class MarkdownProcessorTextBold extends MarkdownProcessor {
+    public order = 30
+
     public patters = ['_', '*']
 
     public findEndIndex() {

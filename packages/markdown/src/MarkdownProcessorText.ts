@@ -3,6 +3,8 @@ import { Token } from '@language-kit/lexer'
 import { MarkdownNodeText } from './MarkdownNodeText'
 
 export class MarkdownProcessorText extends MarkdownProcessor {
+    public order = 30
+
     public tokenTypesConsideredTexts = [Token.types.Word, Token.types.WhiteSpace] as string[]
 
     public process() {

@@ -3,6 +3,8 @@ import { MarkdownNode } from './MarkdownNode'
 import { Token, TokenArray } from '@language-kit/lexer'
 
 export class MarkdownProcessor extends BaseProcessor<MarkdownNode> {
+    public order = 10
+
     public findIndexByType(type: string, start = 0, end?: number) {
         for (let i = 0; i < this.tokens.length; i++) {
             if (i < start) continue

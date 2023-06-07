@@ -2,6 +2,8 @@ import { MarkdownProcessor } from './MarkdownProcessor'
 import { MarkdownNodeTextWithAttrs } from './MarkdownNodeTextWithAttrs'
 
 export class MarkdownProcessorTextWithAttrs extends MarkdownProcessor {
+    public order = 30
+
     public isTextWithAttrs() {
         const conditions = [
             // should have open bracket

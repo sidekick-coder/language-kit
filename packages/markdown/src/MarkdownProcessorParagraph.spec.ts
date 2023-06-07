@@ -18,7 +18,7 @@ describe('MarkdownProcessorParagraph', () => {
         const node = new MarkdownNodeParagraph()
 
         node.start = 0
-        node.end = payload.length - 1
+        node.end = -1 // -1 for EOF
         node.body = payload
 
         node.tokens = parser.toTokens(payload)
@@ -38,6 +38,7 @@ describe('MarkdownProcessorParagraph', () => {
         const payload = ['Hello **word**'].join('\n').trim()
 
         const result = parser.toNodes(payload)
+
         const paragraph = new MarkdownNodeParagraph()
         const text = new MarkdownNodeText()
         const space = new MarkdownNodeText()
@@ -69,13 +70,13 @@ describe('MarkdownProcessorParagraph', () => {
         bold.tokens.setPositions(bold.start)
 
         paragraph.start = 0
-        paragraph.end = payload.length - 1
+        paragraph.end = -1 // -1 for EOF
         paragraph.tokens = parser.toTokens(payload)
         paragraph.body = payload
 
         paragraph.children.push(text, space, bold)
 
-        expect(result.length, 'Should return 1 node').toBe(1)
+        expect(result).toHaveLength(1)
 
         expect(result[0]).toEqual(paragraph)
     })
