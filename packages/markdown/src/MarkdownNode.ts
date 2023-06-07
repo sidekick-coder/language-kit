@@ -36,4 +36,8 @@ export class MarkdownNode extends BaseNode {
     public is<K extends keyof MarkdownNodeInstances>(type: K): this is MarkdownNodeInstances[K] {
         return this.type === type
     }
+
+    public toHtml() {
+        return ''
+    }
 }

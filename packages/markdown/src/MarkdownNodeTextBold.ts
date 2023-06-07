@@ -19,4 +19,14 @@ export class MarkdownNodeTextBold extends MarkdownNode {
 
         return this
     }
+
+    public toHtml() {
+        let childrenHTML = this.children.map((node) => node.toHtml()).join('')
+
+        if (!childrenHTML) {
+            childrenHTML = this.body
+        }
+
+        return `<strong>${childrenHTML}</strong>`
+    }
 }

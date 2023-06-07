@@ -20,4 +20,18 @@ export class MarkdownNodeTextWithAttrs extends MarkdownNode {
 
         return this
     }
+
+    public toHtml() {
+        let childrenHTML = this.children.map((child) => child.toHtml()).join('')
+
+        if (!childrenHTML) {
+            childrenHTML = this.body
+        }
+
+        const attrString = Object.entries(this.attrs).reduce((acc, [key, value]) => {
+            return `${acc} ${key}="${value}"`
+        }, '')
+
+        return `<span${attrString}>${childrenHTML}</span>`
+    }
 }
