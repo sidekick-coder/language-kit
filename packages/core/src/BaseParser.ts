@@ -1,42 +1,75 @@
 import { Lexer, Token, TokenArray, LexerTokenizeOptions } from '@language-kit/lexer'
 import { BaseNode } from './BaseNode'
-import { BaseProcessor } from './BaseProcessor'
+import { BaseProcessor, BaseProcessorConstructor } from './BaseProcessor'
 import { NodeArray } from './NodeArray'
 
+type ProcessorNameOrConstructor = string | BaseProcessorConstructor<BaseProcessor>
+
+interface ToNodeOptionProcessor {
+    exclude?: ProcessorNameOrConstructor[]
+}
+
 interface ToNodeOptions {
-    excludeProcessors?: string[]
-    lexerOptions?: LexerTokenizeOptions
+    processors?: ToNodeOptionProcessor
+    lexer?: LexerTokenizeOptions
 }
 
 export class BaseParser<N extends BaseNode = BaseNode, T extends Token = Token> {
-    public timeout = 500
+    // classes not instantiated that will be used to process tokens
+    private processors = [] as BaseProcessorConstructor<BaseProcessor<N, T>>[]
+    private lexer = new Lexer<T>()
 
-    constructor(public processors: BaseProcessor<N, T>[] = [], public lexer = new Lexer<T>()) {}
+    public setLexer(lexer: Lexer<T>) {
+        this.lexer = lexer
 
-    public addProcessor(processor: BaseProcessor<N, T>) {
-        this.processors.push(processor)
+        return this
+    }
+
+    public setProcessors(processors: BaseProcessorConstructor<BaseProcessor<N, T>>[]) {
+        this.processors = processors
+        return this
+    }
+
+    public addProcessor(...processor: BaseProcessorConstructor<BaseProcessor<N, T>>[]) {
+        this.processors.push(...processor)
+        return this
     }
 
     public toTokens(source: string, options?: LexerTokenizeOptions): TokenArray<T> {
         return this.lexer.tokenize(source, options)
     }
 
+    public findAndInstantiateProcessors(options?: ToNodeOptionProcessor) {
+        const names = (options?.exclude || []).filter((e) => typeof e === 'string') as string[]
+        const constructors = (options?.exclude || []).filter(
+            (e) => typeof e !== 'string'
+        ) as BaseProcessorConstructor<BaseProcessor>[]
+
+        return this.processors
+            .filter((p) => !constructors.includes(p))
+            .map((p) => new p())
+            .filter((p) => !names.includes(p.name))
+    }
+
+    /**
+     * This is to external implementation
+     * @param _token
+     */
+
     public onUnhandledToken(_token: Token) {
         // handle unhandled token
     }
 
     public toNodes(source: string, options?: ToNodeOptions) {
-        this.processors.sort((a, b) => a.order - b.order)
+        const processors = this.findAndInstantiateProcessors(options?.processors)
 
-        let tokens = this.toTokens(source, options?.lexerOptions)
+        processors.sort((a, b) => a.order - b.order)
+
+        let tokens = this.toTokens(source, options?.lexer)
         let nodes = new NodeArray<N>()
 
-        const now = Date.now()
-
         while (tokens.length) {
-            const result = this.processors.find((processor) => {
-                if (options?.excludeProcessors?.includes(processor.name)) return false
-
+            const result = processors.find((processor) => {
                 processor.tokens = tokens
                 processor.parser = this
                 processor.nodes = nodes
@@ -50,10 +83,6 @@ export class BaseParser<N extends BaseNode = BaseNode, T extends Token = Token> 
 
                 return isProcessed
             })
-
-            if (Date.now() - now > this.timeout) {
-                throw new Error('Timeout on parsing string')
-            }
 
             if (result) continue
 

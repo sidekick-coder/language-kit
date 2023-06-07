@@ -3,8 +3,12 @@ import { BaseNode } from './BaseNode'
 import { BaseParser } from './BaseParser'
 import { NodeArray } from './NodeArray'
 
+export interface BaseProcessorConstructor<T extends BaseProcessor = BaseProcessor> {
+    new (): T
+}
+
 export class BaseProcessor<N extends BaseNode = BaseNode, T extends Token = Token> {
-    public name = 'BaseProcessor'
+    public name: string
 
     public parser: BaseParser<N, T>
     public tokens = new TokenArray<T>()
@@ -13,7 +17,9 @@ export class BaseProcessor<N extends BaseNode = BaseNode, T extends Token = Toke
     public order = 999
 
     constructor() {
-        this.name = this.constructor.name
+        if (!this.name) {
+            this.name = this.constructor.name || 'BaseProcessor'
+        }
     }
 
     public process(): boolean {

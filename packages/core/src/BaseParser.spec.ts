@@ -1,19 +1,39 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { BaseParser } from './BaseParser'
 import { BaseProcessor } from './BaseProcessor'
 
 describe('BaseParser', () => {
-    it('should throw an error after timeout of 100', () => {
-        const processor = new BaseProcessor()
+    function createProcessor(name: string) {
+        const spy = vi.fn()
+        return class extends BaseProcessor {
+            constructor() {
+                super()
 
-        processor.process = () => true
+                this.name = name
+                this.process = spy
+            }
 
+            public static spy = spy
+        }
+    }
+
+    it('should exclude defined processors by class constructor or name', () => {
         const parser = new BaseParser()
 
-        parser.addProcessor(processor)
+        const a = createProcessor('nameA')
+        const b = createProcessor('nameB')
+        const c = createProcessor('nameC')
 
-        expect(() => parser.toNodes('Hello word', { timeout: 100 })).toThrowError(
-            'Timeout on parsing string'
-        )
+        parser.addProcessor(a, b, c)
+
+        parser.toNodes('Hello word', {
+            processors: {
+                exclude: [a, 'nameC'],
+            },
+        })
+
+        expect(a.spy).not.toHaveBeenCalled()
+        expect(c.spy).not.toHaveBeenCalled()
+        expect(b.spy).toHaveBeenCalled()
     })
 })
