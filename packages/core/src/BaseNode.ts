@@ -28,4 +28,22 @@ export class BaseNode<T extends Token = Token> {
     public toText() {
         return this.tokens.map((t) => t.value).join('')
     }
+
+    public setPositions(offset?: number) {
+        this.tokens.setPositions(offset)
+
+        const last = this.tokens.at(-1)
+        const first = this.tokens.at(0)
+
+        if (!last || !first) {
+            this.start = -1
+            this.end = -1
+            return this
+        }
+
+        this.start = first.start
+        this.end = last.end
+
+        return this
+    }
 }

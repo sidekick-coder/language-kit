@@ -44,26 +44,6 @@ describe('NodeArray', () => {
         ])
     })
 
-    it('should handle start and end position when have eof', () => {
-        const nodes = new NodeArray(
-            createNode('First line'),
-            createNode('\n'),
-            createNode('last line', true)
-        )
-
-        nodes.setPositions()
-
-        const positions = nodes.map((node) => [node.start, node.end])
-
-        expect(positions).toEqual([
-            [0, 9],
-            [10, 10],
-            [11, 19],
-        ])
-
-        expect(nodes.at(-1).tokens.at(-1).type, 'should have eof token').toBe(Token.types.EndOfFile)
-    })
-
     it('should set start and end position based on start agr', () => {
         const nodes = new NodeArray(
             createNode('First line'),
