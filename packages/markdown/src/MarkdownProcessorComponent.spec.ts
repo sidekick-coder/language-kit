@@ -6,7 +6,7 @@ import { MarkdownProcessorParagraph } from './MarkdownProcessorParagraph'
 
 describe('MarkdownProcessorComponent', () => {
     it('should transform text component', () => {
-        const parser = new MarkdownParser([new MarkdownProcessorComponent()])
+        const parser = new MarkdownParser([MarkdownProcessorComponent])
 
         const payload = ':: button\nHello world\n::\n'
 
@@ -30,7 +30,7 @@ describe('MarkdownProcessorComponent', () => {
     })
 
     it('should transform text inline component', () => {
-        const parser = new MarkdownParser([new MarkdownProcessorComponent()])
+        const parser = new MarkdownParser([MarkdownProcessorComponent])
 
         const payload = ':: button\nHello world\n::'
 
@@ -55,7 +55,7 @@ describe('MarkdownProcessorComponent', () => {
     })
 
     it('should transform text with inline attrs', () => {
-        const parser = new MarkdownParser([new MarkdownProcessorComponent()])
+        const parser = new MarkdownParser([MarkdownProcessorComponent])
 
         const payload = [
             ':: button { id="btn" :data-count="count" color="red" @click="handle()" }',
@@ -90,7 +90,7 @@ describe('MarkdownProcessorComponent', () => {
     })
 
     it('should transform text with attrs break-lines', () => {
-        const parser = new MarkdownParser([new MarkdownProcessorComponent()])
+        const parser = new MarkdownParser([MarkdownProcessorComponent])
 
         const payload = [
             ':: button {',
@@ -130,15 +130,12 @@ describe('MarkdownProcessorComponent', () => {
     })
 
     it('should have priority over paragraph node', () => {
-        const parser = new MarkdownParser([
-            new MarkdownProcessorParagraph(),
-            new MarkdownProcessorComponent(),
-        ])
+        const parser = new MarkdownParser([MarkdownProcessorParagraph, MarkdownProcessorComponent])
 
         const payload = [':: button', 'Hello world', '::'].join('\n').trim()
 
         const result = parser.toNodes(payload, {
-            lexerOptions: {
+            lexer: {
                 includeEndOfFileToken: false,
             },
         })

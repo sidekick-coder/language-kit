@@ -61,7 +61,9 @@ export class MarkdownProcessorTextWithAttrs extends MarkdownProcessor {
         node.attrs = this.findAttrs()
 
         node.children = this.parser.toNodes(node.body, {
-            excludeProcessors: [this.name],
+            processors: {
+                exclude: [this.name],
+            },
         })
 
         this.addNode(node)

@@ -9,7 +9,7 @@ import { MarkdownProcessorText } from './MarkdownProcessorText'
 
 describe('MarkdownProcessorParagraph', () => {
     it('should transform text in node paragraph', () => {
-        const parser = new MarkdownParser([new MarkdownProcessorParagraph()])
+        const parser = new MarkdownParser([MarkdownProcessorParagraph])
 
         const payload = 'Hello world'
 
@@ -30,9 +30,9 @@ describe('MarkdownProcessorParagraph', () => {
 
     it('should process child nodes', () => {
         const parser = new MarkdownParser([
-            new MarkdownProcessorParagraph(),
-            new MarkdownProcessorTextBold(),
-            new MarkdownProcessorText(),
+            MarkdownProcessorParagraph,
+            MarkdownProcessorTextBold,
+            MarkdownProcessorText,
         ])
 
         const payload = ['Hello **word**'].join('\n').trim()
@@ -66,8 +66,13 @@ describe('MarkdownProcessorParagraph', () => {
         bold.tokens = parser.toTokens('**word**', {
             includeEndOfFileToken: false,
         })
+        bold.children = parser.toNodes('word', {
+            processors: {
+                exclude: [MarkdownProcessorParagraph],
+            },
+        })
 
-        bold.tokens.setPositions(bold.start)
+        bold.setPositions(bold.start)
 
         paragraph.start = 0
         paragraph.end = -1 // -1 for EOF

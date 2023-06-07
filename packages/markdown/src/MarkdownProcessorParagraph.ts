@@ -17,8 +17,10 @@ export class MarkdownProcessorParagraph extends MarkdownProcessor {
         node.tokens = tokens
 
         node.children = this.parser.toNodes(node.body, {
-            excludeProcessors: [this.name],
-            lexerOptions: {
+            processors: {
+                exclude: [this.name],
+            },
+            lexer: {
                 includeEndOfFileToken: false,
             },
         })

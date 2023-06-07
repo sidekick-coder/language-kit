@@ -1,6 +1,6 @@
 import { BaseProcessor } from '@language-kit/core'
 import { MarkdownNode } from './MarkdownNode'
-import { Token, TokenArray } from '@language-kit/lexer'
+import { Token } from '@language-kit/lexer'
 
 export class MarkdownProcessor extends BaseProcessor<MarkdownNode> {
     public order = 10

@@ -33,9 +33,16 @@ export class MarkdownProcessorTextBold extends MarkdownProcessor {
 
         node.body = tokens.slice(2, tokens.length - 2).toText()
         node.tokens = tokens
+        node.children = this.parser.toNodes(node.body, {
+            processors: {
+                exclude: [this.name],
+            },
+            lexer: {
+                includeEndOfFileToken: false,
+            },
+        })
 
-        this.nodes.push(node)
-        this.tokens.splice(0, tokens.length)
+        this.addNode(node)
 
         return true
     }

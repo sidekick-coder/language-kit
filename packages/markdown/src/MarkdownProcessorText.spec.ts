@@ -27,7 +27,7 @@ describe('MarkdownProcessorTextBold', () => {
     }
 
     it('should transform text node text', () => {
-        const parser = new MarkdownParser([new MarkdownProcessorText()])
+        const parser = new MarkdownParser([MarkdownProcessorText])
 
         const payload = 'Hello world'
 

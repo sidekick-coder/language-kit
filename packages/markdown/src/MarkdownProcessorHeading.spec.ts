@@ -5,7 +5,7 @@ import { MarkdownNodeHeading } from './MarkdownNodeHeading'
 
 describe('MarkdownProcessorHeading', () => {
     it('should transform text in node heading', () => {
-        const parser = new MarkdownParser([new MarkdownProcessorHeading()])
+        const parser = new MarkdownParser([MarkdownProcessorHeading])
 
         const payload = '# Hello world'
 
