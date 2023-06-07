@@ -3,13 +3,13 @@ import { BaseNode } from './BaseNode'
 import { BaseProcessor, BaseProcessorConstructor } from './BaseProcessor'
 import { NodeArray } from './NodeArray'
 
-type ProcessorNameOrConstructor = string | BaseProcessorConstructor<BaseProcessor>
+export type ProcessorNameOrConstructor = string | BaseProcessorConstructor<BaseProcessor>
 
-interface ToNodeOptionProcessor {
+export interface ToNodeOptionProcessor {
     exclude?: ProcessorNameOrConstructor[]
 }
 
-interface ToNodeOptions {
+export interface ToNodeOptions {
     processors?: ToNodeOptionProcessor
     lexer?: LexerTokenizeOptions
 }
