@@ -29,7 +29,7 @@ export class MarkdownProcessorTextBold extends MarkdownProcessor {
 
         const tokens = this.tokens.slice(0, endIndex + 1)
 
-        node.text = tokens.slice(2, tokens.length - 2).toText()
+        node.body = tokens.slice(2, tokens.length - 2).toText()
         node.tokens = tokens
 
         this.nodes.push(node)

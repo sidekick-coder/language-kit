@@ -16,7 +16,7 @@ describe('MarkdownProcessorTextBold', () => {
 
         node.start = 0
         node.end = payload.length - 1
-        node.text = 'Hello world'
+        node.body = 'Hello world'
         node.tokens = parser.toTokens(payload, {
             includeEndOfFileToken: false,
         })
@@ -38,7 +38,7 @@ describe('MarkdownProcessorTextBold', () => {
 
         node.start = 0
         node.end = payload.length - 1
-        node.text = 'Hello world'
+        node.body = 'Hello world'
         node.tokens = parser.toTokens(payload, {
             includeEndOfFileToken: false,
         })

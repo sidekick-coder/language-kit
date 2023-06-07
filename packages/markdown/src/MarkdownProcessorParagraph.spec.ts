@@ -19,7 +19,7 @@ describe('MarkdownProcessorParagraph', () => {
 
         node.start = 0
         node.end = payload.length - 1
-        node.text = payload
+        node.body = payload
 
         node.tokens = parser.toTokens(payload)
 
@@ -45,14 +45,14 @@ describe('MarkdownProcessorParagraph', () => {
 
         text.start = 0
         text.end = 4
-        text.text = 'Hello'
+        text.body = 'Hello'
         text.tokens = parser.toTokens('Hello', {
             includeEndOfFileToken: false,
         })
 
         space.start = 5
         space.end = 5
-        space.text = ' '
+        space.body = ' '
         space.tokens = parser.toTokens(' ', {
             includeEndOfFileToken: false,
         })
@@ -61,7 +61,7 @@ describe('MarkdownProcessorParagraph', () => {
 
         bold.start = 6
         bold.end = 13
-        bold.text = 'word'
+        bold.body = 'word'
         bold.tokens = parser.toTokens('**word**', {
             includeEndOfFileToken: false,
         })
@@ -71,7 +71,7 @@ describe('MarkdownProcessorParagraph', () => {
         paragraph.start = 0
         paragraph.end = payload.length - 1
         paragraph.tokens = parser.toTokens(payload)
-        paragraph.text = payload
+        paragraph.body = payload
 
         paragraph.children.push(text, space, bold)
 

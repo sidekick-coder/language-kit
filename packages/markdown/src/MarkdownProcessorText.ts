@@ -12,7 +12,7 @@ export class MarkdownProcessorText extends MarkdownProcessor {
 
         const node = new MarkdownNodeText()
 
-        node.text = token.value
+        node.body = token.value
         node.tokens = this.tokens.slice(0, 1)
 
         this.nodes.push(node)

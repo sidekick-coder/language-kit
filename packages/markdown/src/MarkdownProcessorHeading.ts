@@ -18,10 +18,9 @@ export class MarkdownProcessorHeading extends MarkdownProcessor {
         const node = new MarkdownNodeHeading()
 
         node.tokens = tokens
+        node.body = tokens.slice(1).toText().trim()
 
-        this.nodes.push(node)
-
-        this.tokens.splice(0, tokens.length)
+        this.addNode(node)
 
         return true
     }

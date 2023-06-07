@@ -93,30 +93,9 @@ export class MarkdownProcessorComponent extends MarkdownProcessor {
     }
 
     public findAttrsObject(): MarkdownNodeComponent['attrs'] {
-        const tokens = this.findAttrsTokens().slice(1, -1)
+        const tokens = this.findAttrsTokens()
 
-        const result: MarkdownNodeComponent['attrs'] = {}
-
-        /**
-         * Get the key and value of the attribute.
-         * @example
-         * `id="btn"` => { key: 'id', value: 'btn' }
-         * `:data-count="count"` => { key: ':data-count', value: 'count' }
-         * `color="red"` => { key: 'color', value: 'red' }
-         * `@click="handle()"` => { key: '@click', value: 'handle()' }
-         */
-        const regex = /(?<key>[^=]+)="(?<value>[^"]+)"/g
-
-        Array.from(tokens.toText().matchAll(regex)).forEach((match) => {
-            const key = match.groups?.key
-            const value = match.groups?.value
-
-            if (!key || !value) return
-
-            result[key.trim()] = value
-        })
-
-        return result
+        return this.transformStringToAttrsObject(tokens.toText())
     }
 
     public findBodyTokens() {
