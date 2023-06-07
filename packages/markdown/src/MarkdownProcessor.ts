@@ -3,12 +3,18 @@ import { MarkdownNode } from './MarkdownNode'
 import { Token } from '@language-kit/lexer'
 
 export class MarkdownProcessor extends BaseProcessor<MarkdownNode> {
-    public findIndexByType(type: string, start = 0) {
-        return this.tokens.findIndex((token, i) => {
-            if (i < start) return false
+    public findIndexByType(type: string, start = 0, end?: number) {
+        for (let i = 0; i < this.tokens.length; i++) {
+            if (i < start) continue
 
-            return token.type === type
-        })
+            if (end && i > end) break
+
+            const current = this.tokens[i]
+
+            if (current.type === type) return i
+        }
+
+        return -1
     }
 
     public findIndexByValue(value: string, start = 0, end?: number) {

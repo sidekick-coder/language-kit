@@ -1,5 +1,6 @@
 import { BaseNode } from '@language-kit/core'
 import { MarkdownNodeComponent } from './MarkdownNodeComponent'
+import { MarkdownNodeText } from './MarkdownNodeText'
 import { MarkdownNodeTextBold } from './MarkdownNodeTextBold'
 import { MarkdownNodeParagraph } from './MarkdownNodeParagraph'
 import { MarkdownNodeHeading } from './MarkdownNodeHeading'
@@ -10,6 +11,7 @@ export enum MarkdownNodeNodeType {
     Heading = 'heading',
     Component = 'component',
     TextBold = 'text-bold',
+    Text = 'text',
 }
 
 interface Teste {
@@ -17,6 +19,7 @@ interface Teste {
     [MarkdownNodeNodeType.Paragraph]: MarkdownNodeParagraph
     [MarkdownNodeNodeType.Heading]: MarkdownNodeHeading
     [MarkdownNodeNodeType.Component]: MarkdownNodeComponent
+    [MarkdownNodeNodeType.Text]: MarkdownNodeText
     [MarkdownNodeNodeType.TextBold]: MarkdownNodeTextBold
     // all other types are MarkdownNode
     [key: string]: MarkdownNode

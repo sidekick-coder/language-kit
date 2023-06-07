@@ -11,7 +11,15 @@ export class MarkdownProcessorParagraph extends MarkdownProcessor {
 
         const node = new MarkdownNodeParagraph()
 
+        node.text = tokens.toText()
         node.tokens = tokens
+
+        node.children = this.parser.toNodes(node.text, {
+            excludeProcessors: [this.name],
+            lexerOptions: {
+                includeEndOfFileToken: false,
+            },
+        })
 
         this.nodes.push(node)
 

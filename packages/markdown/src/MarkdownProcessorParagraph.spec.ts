@@ -2,7 +2,10 @@ import { describe, it, expect } from 'vitest'
 import { MarkdownParser } from './MarkdownParser'
 import { MarkdownNodeParagraph } from './MarkdownNodeParagraph'
 import { MarkdownProcessorParagraph } from './MarkdownProcessorParagraph'
-import { MarkdownProcessorComponent } from './MarkdownProcessorComponent'
+import { MarkdownProcessorTextBold } from './MarkdownProcessorTextBold'
+import { MarkdownNodeText } from './MarkdownNodeText'
+import { MarkdownNodeTextBold } from './MarkdownNodeTextBold'
+import { MarkdownProcessorText } from './MarkdownProcessorText'
 
 describe('MarkdownProcessorParagraph', () => {
     it('should transform text in node paragraph', () => {
@@ -16,6 +19,7 @@ describe('MarkdownProcessorParagraph', () => {
 
         node.start = 0
         node.end = payload.length - 1
+        node.text = payload
 
         node.tokens = parser.toTokens(payload)
 
@@ -24,19 +28,55 @@ describe('MarkdownProcessorParagraph', () => {
         expect(result[0]).toEqual(node)
     })
 
-    it('should not transform text component in paragraph', () => {
+    it('should process child nodes', () => {
         const parser = new MarkdownParser([
             new MarkdownProcessorParagraph(),
-            new MarkdownProcessorComponent(),
+            new MarkdownProcessorTextBold(),
+            new MarkdownProcessorText(),
         ])
 
-        const payload = [':: button', 'Hello world', '::'].join('\n').trim()
+        const payload = ['Hello **word**'].join('\n').trim()
 
         const result = parser.toNodes(payload)
+        const paragraph = new MarkdownNodeParagraph()
+        const text = new MarkdownNodeText()
+        const space = new MarkdownNodeText()
+        const bold = new MarkdownNodeTextBold()
 
-        expect(result.length, 'Should return only 2 nodes').toBe(2)
+        text.start = 0
+        text.end = 4
+        text.text = 'Hello'
+        text.tokens = parser.toTokens('Hello', {
+            includeEndOfFileToken: false,
+        })
 
-        expect(result[0].type).toBe(MarkdownNodeParagraph.types.Component)
-        expect(result[1].type).toBe(MarkdownNodeParagraph.types.Paragraph)
+        space.start = 5
+        space.end = 5
+        space.text = ' '
+        space.tokens = parser.toTokens(' ', {
+            includeEndOfFileToken: false,
+        })
+
+        space.tokens.setPositions(space.start)
+
+        bold.start = 6
+        bold.end = 13
+        bold.text = 'word'
+        bold.tokens = parser.toTokens('**word**', {
+            includeEndOfFileToken: false,
+        })
+
+        bold.tokens.setPositions(bold.start)
+
+        paragraph.start = 0
+        paragraph.end = payload.length - 1
+        paragraph.tokens = parser.toTokens(payload)
+        paragraph.text = payload
+
+        paragraph.children.push(text, space, bold)
+
+        expect(result.length, 'Should return 1 node').toBe(1)
+
+        expect(result[0]).toEqual(paragraph)
     })
 })
