@@ -13,7 +13,34 @@ export class MarkdownProcessorComponent extends MarkdownProcessor {
      */
     public wrapperPatternLength = 2
 
-    public findEndComponentIndex() {
+    /**
+     * The normal end component pattern is with a break line on the end
+     * @returns
+     * @example
+     * `::\n`
+     */
+    public findEndComponentWithBreakLineIndex() {
+        return this.tokens.findIndex((t, i) => {
+            if (i <= 2) return false
+
+            const prev = this.tokens[i - 1]
+            const prevPrev = this.tokens[i - 2]
+
+            if (!prev || !prevPrev) return false
+
+            if (t.type !== Token.types.BreakLine) return false
+
+            return [prev.value, prevPrev.value].every((value) => value === ':')
+        })
+    }
+
+    /**
+     * The inline end component pattern is without a break line on the end
+     * @returns
+     * @example
+     * `::`
+     */
+    public findInlineEndComponentIndex() {
         return this.tokens.findIndex((t, i) => {
             if (i <= 2) return false
 
@@ -23,6 +50,14 @@ export class MarkdownProcessorComponent extends MarkdownProcessor {
 
             return [prev.value, t.value].every((value) => value === ':')
         })
+    }
+
+    public findEndComponentIndex() {
+        const withBreakLineIndex = this.findEndComponentWithBreakLineIndex()
+
+        if (withBreakLineIndex !== -1) return withBreakLineIndex
+
+        return this.findInlineEndComponentIndex()
     }
 
     public findNameTokens() {
@@ -124,6 +159,7 @@ export class MarkdownProcessorComponent extends MarkdownProcessor {
         node.body = this.findBodyTokens().toText().trim()
         node.name = this.findNameTokens().toText().trim()
         node.attrs = this.findAttrsObject()
+        node.isInlined = tokens.at(-1)?.type !== Token.types.BreakLine
 
         this.nodes.push(node)
 
