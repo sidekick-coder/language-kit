@@ -4,11 +4,13 @@ import { BaseProcessor } from './BaseProcessor'
 import { NodeArray } from './NodeArray'
 
 interface ToNodeOptions {
-    onUnhandledToken?: (token: Token) => void
-    timeout?: number
+    excludeProcessors?: string[]
+    lexerOptions?: LexerTokenizeOptions
 }
 
 export class BaseParser<N extends BaseNode = BaseNode, T extends Token = Token> {
+    public timeout = 500
+
     constructor(public processors: BaseProcessor<N, T>[] = [], public lexer = new Lexer<T>()) {}
 
     public addProcessor(processor: BaseProcessor<N, T>) {
@@ -19,17 +21,22 @@ export class BaseParser<N extends BaseNode = BaseNode, T extends Token = Token> 
         return this.lexer.tokenize(source, options)
     }
 
+    public onUnhandledToken(_token: Token) {
+        // handle unhandled token
+    }
+
     public toNodes(source: string, options?: ToNodeOptions) {
         this.processors.sort((a, b) => a.order - b.order)
 
-        let tokens = this.toTokens(source)
+        let tokens = this.toTokens(source, options?.lexerOptions)
         let nodes = new NodeArray<N>()
-        const timeout = options?.timeout ?? 500
 
         const now = Date.now()
 
         while (tokens.length) {
             const result = this.processors.find((processor) => {
+                if (options?.excludeProcessors?.includes(processor.name)) return false
+
                 processor.tokens = tokens
                 processor.parser = this
                 processor.nodes = nodes
@@ -44,15 +51,13 @@ export class BaseParser<N extends BaseNode = BaseNode, T extends Token = Token> 
                 return isProcessed
             })
 
-            if (Date.now() - now > timeout) {
+            if (Date.now() - now > this.timeout) {
                 throw new Error('Timeout on parsing string')
             }
 
             if (result) continue
 
-            if (options?.onUnhandledToken) {
-                options.onUnhandledToken(tokens[0])
-            }
+            this.onUnhandledToken(tokens[0])
 
             tokens.shift()
         }

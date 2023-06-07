@@ -7,8 +7,11 @@ export class NodeArray<N extends BaseNode = BaseNode> extends Array<N> {
 
         this.forEach((node) => {
             node.tokens.setPositions(position)
-
             const last = node.tokens.at(-1)
+
+            if (last?.type === Token.types.EndOfFile) {
+                return
+            }
 
             position = last ? last.end + 1 : position
         })
