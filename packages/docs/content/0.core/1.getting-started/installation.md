@@ -1,0 +1,3 @@
+# Installation of core
+
+write
