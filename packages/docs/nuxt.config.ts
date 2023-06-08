@@ -4,5 +4,10 @@ export default defineNuxtConfig({
     '@nuxtjs/plausible',
     '@nuxt/devtools',
     '@nuxtjs/tailwindcss'
-  ]
+  ],
+  content: {
+    experimental: {
+      clientDb: true
+    }
+  }
 })
