@@ -9,5 +9,8 @@ export default defineNuxtConfig({
     experimental: {
       clientDb: true
     }
+  },
+  app: {
+    baseURL: process.env.BASE_URL,
   }
 })

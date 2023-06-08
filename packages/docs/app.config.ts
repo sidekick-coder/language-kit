@@ -7,6 +7,9 @@ export default defineAppConfig({
       twitter: 'nuxtstudio',
       github: 'nuxt-themes/docus'
     },
+    app: {
+        cdnURL: process.env.CDN_URL,
+    },
     github: {
       dir: '.starters/default/content',
       branch: 'main',
