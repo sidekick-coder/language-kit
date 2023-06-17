@@ -1,5 +1,6 @@
 import { MarkdownProcessor } from './MarkdownProcessor'
 import { MarkdownNodeTextWithAttrs } from './MarkdownNodeTextWithAttrs'
+import { MarkdownProcessorParagraph } from '.'
 
 export class MarkdownProcessorTextWithAttrs extends MarkdownProcessor {
     public order = 30
@@ -62,7 +63,7 @@ export class MarkdownProcessorTextWithAttrs extends MarkdownProcessor {
 
         node.children = this.parser.toNodes(node.body, {
             processors: {
-                exclude: [this.name],
+                exclude: [MarkdownProcessorTextWithAttrs, MarkdownProcessorParagraph],
             },
         })
 
