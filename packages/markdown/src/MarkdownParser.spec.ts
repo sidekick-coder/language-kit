@@ -43,4 +43,20 @@ describe('MarkdownParser', () => {
 
         expect(html).toBe('<h1>Heading</h1><p><strong>Bold text</strong></p><p>NormalText</p>')
     })
+
+    it('should transform nodes with symbolds in html', () => {
+        const payload = ['# Heading @123 ', '**Hello {{crazy}}**', 'Normal Text with #hello'].join(
+            '\n'
+        )
+
+        const parser = new MarkdownParser()
+
+        const nodes = parser.toNodes(payload)
+
+        const html = nodes.toHtml()
+
+        expect(html).toBe(
+            '<h1>Heading @123</h1><p><strong>Hello {{crazy}}</strong></p><p>Normal Text with #hello</p>'
+        )
+    })
 })

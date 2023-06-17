@@ -5,7 +5,11 @@ import { MarkdownNodeText } from './MarkdownNodeText'
 export class MarkdownProcessorText extends MarkdownProcessor {
     public order = 40
 
-    public tokenTypesConsideredTexts = [Token.types.Word, Token.types.WhiteSpace] as string[]
+    public tokenTypesConsideredTexts = [
+        Token.types.Word,
+        Token.types.WhiteSpace,
+        Token.types.Symbol,
+    ] as string[]
 
     public process() {
         const token = this.tokens[0]
