@@ -1,4 +1,7 @@
-# Support the development
+---
+layout: centralized
+---
+# Support
 
 Suggestions and issues are welcome
 

@@ -1,6 +1,8 @@
-
+<script setup>
+// 
+</script>
 <template>
-  <div class="container mx-auto px-4 py-4">
+  <div class="lk-h-[calc(100vh-64px-100px)] lk-text-center lk-flex lk-items-center lk-justify-center">
     <slot />
   </div>
 </template>

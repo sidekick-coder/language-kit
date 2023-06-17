@@ -5,6 +5,9 @@ export default defineNuxtConfig({
     '@nuxt/devtools',
     '@nuxtjs/tailwindcss'
   ],
+  tailwindcss: {
+    configPath: '~/tailwind.config.ts'
+  },
   content: {
     experimental: {
       clientDb: true
