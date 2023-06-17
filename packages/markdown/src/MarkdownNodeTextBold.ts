@@ -1,10 +1,10 @@
-import { NodeArray } from '@language-kit/core'
 import { MarkdownNode, MarkdownNodeNodeType } from './MarkdownNode'
+import { MarkdownNodeArray } from './MarkdownNodeArray'
 
 export class MarkdownNodeTextBold extends MarkdownNode {
     public readonly type = MarkdownNodeNodeType.TextBold
     public body = ''
-    public children = new NodeArray<MarkdownNode>()
+    public children = new MarkdownNodeArray()
 
     /**
      * Override setPositions method to set positions for children nodes with correct offset

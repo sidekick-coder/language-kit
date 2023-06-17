@@ -1,10 +1,10 @@
-import { NodeArray } from '@language-kit/core'
 import { MarkdownNode, MarkdownNodeNodeType } from './MarkdownNode'
+import { MarkdownNodeArray } from './MarkdownNodeArray'
 
 export class MarkdownNodeTextWithAttrs extends MarkdownNode {
     public readonly type = MarkdownNodeNodeType.TextWithAttrs
     public body = ''
-    public children = new NodeArray<MarkdownNode>()
+    public children = new MarkdownNodeArray()
     public attrs: Record<string, string> = {}
 
     /**
