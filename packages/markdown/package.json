@@ -1,6 +1,6 @@
 {
   "name": "@language-kit/markdown",
-  "version": "1.4.8",
+  "version": "1.4.9",
   "description": "Parser and process markdown strings",
   "author": "Henrique Oliveira <henriqueoliwork@gmail.com>",
   "license": "MIT",
