@@ -1,12 +1,13 @@
 import { Lexer, Token, TokenArray, LexerTokenizeOptions } from '@language-kit/lexer'
-import { BaseNode } from './BaseNode'
 import { BaseProcessor, BaseProcessorConstructor } from './BaseProcessor'
 import { NodeArray } from './NodeArray'
+import { BaseNode } from '.'
 
-export type ProcessorNameOrConstructor = string | BaseProcessorConstructor<BaseProcessor>
+export type ProcessorNameOrConstructor = string | BaseProcessorConstructor
 
 export interface ToNodeOptionProcessor {
     exclude?: ProcessorNameOrConstructor[]
+    only?: ProcessorNameOrConstructor[]
 }
 
 export interface ToNodeOptions {
@@ -19,18 +20,18 @@ export class BaseParser<N extends BaseNode = BaseNode, T extends Token = Token> 
     private processors = [] as BaseProcessorConstructor<BaseProcessor<N, T>>[]
     private lexer = new Lexer<T>()
 
-    public setLexer(lexer: Lexer<T>) {
+    public setLexer(lexer: BaseParser<N, T>['lexer']) {
         this.lexer = lexer
 
         return this
     }
 
-    public setProcessors(processors: BaseProcessorConstructor<BaseProcessor<N, T>>[]) {
+    public setProcessors(processors: BaseParser<N, T>['processors']) {
         this.processors = processors
         return this
     }
 
-    public addProcessor(...processor: BaseProcessorConstructor<BaseProcessor<N, T>>[]) {
+    public addProcessor(...processor: BaseParser<N, T>['processors']) {
         this.processors.push(...processor)
         return this
     }
@@ -40,15 +41,61 @@ export class BaseParser<N extends BaseNode = BaseNode, T extends Token = Token> 
     }
 
     public findAndInstantiateProcessors(options?: ToNodeOptionProcessor) {
-        const names = (options?.exclude || []).filter((e) => typeof e === 'string') as string[]
-        const constructors = (options?.exclude || []).filter(
-            (e) => typeof e !== 'string'
-        ) as BaseProcessorConstructor<BaseProcessor>[]
+        const onlyConstructors = [] as BaseProcessorConstructor[]
+        const onlyNames = [] as string[]
 
-        return this.processors
-            .filter((p) => !constructors.includes(p))
-            .map((p) => new p())
-            .filter((p) => !names.includes(p.name))
+        const excludeConstructors = [] as BaseProcessorConstructor[]
+        const excludeNames = [] as string[]
+
+        const result = [] as BaseProcessor<N, T>[]
+
+        if (options?.only) {
+            options.only
+                .filter((o) => typeof o !== 'string')
+                .forEach((c) => onlyConstructors.push(c as BaseProcessorConstructor))
+
+            options.only
+                .filter((o) => typeof o === 'string')
+                .forEach((c) => onlyNames.push(c as string))
+        }
+
+        if (options?.exclude) {
+            options.exclude
+                .filter((o) => typeof o !== 'string')
+                .forEach((c) => excludeConstructors.push(c as BaseProcessorConstructor))
+
+            options.exclude
+                .filter((o) => typeof o === 'string')
+                .forEach((c) => excludeNames.push(c as string))
+        }
+
+        this.processors.forEach((c) => {
+            const instance = new c()
+
+            if (onlyConstructors.includes(c)) {
+                return result.push(instance)
+            }
+
+            if (onlyNames.includes(instance.name)) {
+                return result.push(instance)
+            }
+
+            if (onlyConstructors.length || onlyNames.length) return
+
+            if (excludeConstructors.includes(c)) {
+                return
+            }
+
+            if (excludeNames.includes(instance.name)) {
+                return
+            }
+
+            result.push(instance)
+        })
+
+        result.sort((a, b) => a.order - b.order)
+
+        return result
     }
 
     /**
@@ -62,8 +109,6 @@ export class BaseParser<N extends BaseNode = BaseNode, T extends Token = Token> 
 
     public toNodes(source: string, options?: ToNodeOptions) {
         const processors = this.findAndInstantiateProcessors(options?.processors)
-
-        processors.sort((a, b) => a.order - b.order)
 
         let tokens = this.toTokens(source, options?.lexer)
         let nodes = new NodeArray<N>()
