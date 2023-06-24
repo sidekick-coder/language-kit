@@ -1,9 +1,12 @@
 import { BaseProcessor } from '@language-kit/core'
 import { MarkdownNode } from './MarkdownNode'
 import { Token } from '@language-kit/lexer'
+import { MarkdownParser } from '.'
 
-export class MarkdownProcessor extends BaseProcessor<MarkdownNode> {
+export class MarkdownProcessor extends BaseProcessor {
     public order = 10
+
+    public declare parser: MarkdownParser
 
     public findIndexByType(type: string, start = 0, end?: number) {
         for (let i = 0; i < this.tokens.length; i++) {

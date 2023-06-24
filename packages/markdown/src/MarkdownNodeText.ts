@@ -1,7 +1,7 @@
-import { MarkdownNode, MarkdownNodeNodeType } from './MarkdownNode'
+import { MarkdownNode, MarkdownNodeType } from './MarkdownNode'
 
 export class MarkdownNodeText extends MarkdownNode {
-    public readonly type = MarkdownNodeNodeType.Text
+    public readonly type = MarkdownNodeType.Text
     public body = ''
 
     public toHtml() {

@@ -6,34 +6,44 @@ import { MarkdownNodeParagraph } from './MarkdownNodeParagraph'
 import { MarkdownNodeHeading } from './MarkdownNodeHeading'
 import { MarkdownNodeTextWithAttrs } from './MarkdownNodeTextWithAttrs'
 
-export enum MarkdownNodeNodeType {
-    Unknown = 'unknown',
-    Paragraph = 'paragraph',
-    Heading = 'heading',
-    Component = 'component',
-    TextBold = 'text-bold',
-    TextWithAttrs = 'text-with-attrs',
-    Text = 'text',
+export enum MarkdownNodeType {
+    Unknown = 'Unknown',
+    Paragraph = 'Paragraph',
+    Heading = 'Heading',
+    Component = 'Component',
+    TextBold = 'TextBold',
+    TextWithAttrs = 'TextWithAttrs',
+    Text = 'Text',
 }
 
-interface MarkdownNodeInstances {
-    [MarkdownNodeNodeType.Unknown]: MarkdownNode
-    [MarkdownNodeNodeType.Paragraph]: MarkdownNodeParagraph
-    [MarkdownNodeNodeType.Heading]: MarkdownNodeHeading
-    [MarkdownNodeNodeType.Component]: MarkdownNodeComponent
-    [MarkdownNodeNodeType.Text]: MarkdownNodeText
-    [MarkdownNodeNodeType.TextBold]: MarkdownNodeTextBold
-    [MarkdownNodeNodeType.TextWithAttrs]: MarkdownNodeTextWithAttrs
-    // all other types are MarkdownNode
+export type MarkdownNodeTypeName = keyof typeof MarkdownNodeType
+
+interface InstancesTypesByEnum {
+    [MarkdownNodeType.Unknown]: MarkdownNode
+    [MarkdownNodeType.Paragraph]: MarkdownNodeParagraph
+    [MarkdownNodeType.Heading]: MarkdownNodeHeading
+    [MarkdownNodeType.Component]: MarkdownNodeComponent
+    [MarkdownNodeType.Text]: MarkdownNodeText
+    [MarkdownNodeType.TextBold]: MarkdownNodeTextBold
+    [MarkdownNodeType.TextWithAttrs]: MarkdownNodeTextWithAttrs
     [key: string]: MarkdownNode
 }
 
 export class MarkdownNode extends BaseNode {
-    public type: string = MarkdownNodeNodeType.Unknown
+    // type of node
+    public type: string = MarkdownNodeType.Unknown
 
-    public static types = MarkdownNodeNodeType
+    // default node types
+    public static types = MarkdownNodeType
 
-    public is<K extends keyof MarkdownNodeInstances>(type: K): this is MarkdownNodeInstances[K] {
+    // meta data
+    public meta: any = {}
+
+    public is<K extends MarkdownNodeType>(type: K): this is InstancesTypesByEnum[K]
+    public is<K extends MarkdownNodeTypeName>(type: K): this is InstancesTypesByEnum[K]
+    public is<T>(type: string): this is T
+    public is(type: string): this is MarkdownNode
+    public is(type: string) {
         return this.type === type
     }
 

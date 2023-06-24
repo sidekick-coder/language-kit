@@ -1,8 +1,8 @@
-import { MarkdownNode, MarkdownNodeNodeType } from './MarkdownNode'
+import { MarkdownNode, MarkdownNodeType } from './MarkdownNode'
 import { MarkdownNodeArray } from './MarkdownNodeArray'
 
 export class MarkdownNodeTextWithAttrs extends MarkdownNode {
-    public readonly type = MarkdownNodeNodeType.TextWithAttrs
+    public readonly type = MarkdownNodeType.TextWithAttrs
     public body = ''
     public children = new MarkdownNodeArray()
     public attrs: Record<string, string> = {}

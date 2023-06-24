@@ -9,7 +9,7 @@ import { MarkdownProcessorText } from './MarkdownProcessorText'
 import { MarkdownProcessorTextBold } from './MarkdownProcessorTextBold'
 import { MarkdownProcessorTextWithAttrs } from './MarkdownProcessorTextWithAttrs'
 
-export const Processors: Record<string, BaseProcessorConstructor<MarkdownProcessor>> = {
+export const Processors: Record<string, BaseProcessorConstructor> = {
     Paragraph: MarkdownProcessorParagraph,
     Heading: MarkdownProcessorHeading,
     Component: MarkdownProcessorComponent,
@@ -19,7 +19,7 @@ export const Processors: Record<string, BaseProcessorConstructor<MarkdownProcess
 }
 
 export class MarkdownParser extends BaseParser<MarkdownNode> {
-    constructor(processors?: BaseProcessorConstructor<MarkdownProcessor>[]) {
+    constructor(processors?: BaseProcessorConstructor[]) {
         super()
 
         this.setProcessors(processors || Object.values(Processors))

@@ -1,8 +1,8 @@
-import { MarkdownNode, MarkdownNodeNodeType } from './MarkdownNode'
+import { MarkdownNode, MarkdownNodeType } from './MarkdownNode'
 import { MarkdownNodeArray } from './MarkdownNodeArray'
 
 export class MarkdownNodeTextBold extends MarkdownNode {
-    public readonly type = MarkdownNodeNodeType.TextBold
+    public readonly type = MarkdownNodeType.TextBold
     public body = ''
     public children = new MarkdownNodeArray()
 

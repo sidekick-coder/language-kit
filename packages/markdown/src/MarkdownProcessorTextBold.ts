@@ -1,6 +1,10 @@
 import { MarkdownProcessor } from './MarkdownProcessor'
 import { MarkdownNodeTextBold } from './MarkdownNodeTextBold'
-import { MarkdownProcessorParagraph } from '.'
+import {
+    MarkdownProcessorParagraph,
+    MarkdownProcessorText,
+    MarkdownProcessorTextWithAttrs,
+} from '.'
 
 export class MarkdownProcessorTextBold extends MarkdownProcessor {
     public order = 30
@@ -35,11 +39,11 @@ export class MarkdownProcessorTextBold extends MarkdownProcessor {
         node.body = tokens.slice(2, tokens.length - 2).toText()
         node.tokens = tokens
         node.children = this.parser.toNodes(node.body, {
-            processors: {
-                exclude: [MarkdownProcessorTextBold, MarkdownProcessorParagraph],
-            },
             lexer: {
                 includeEndOfFileToken: false,
+            },
+            processors: {
+                only: [MarkdownProcessorText, MarkdownProcessorTextWithAttrs],
             },
         })
 
