@@ -1,6 +1,6 @@
 {
     "name": "@language-kit/core",
-    "version": "0.0.9",
+    "version": "0.1.2",
     "description": "Base classes for parser strings into Nodes",
     "author": "Henrique Oliveira <henriqueoliwork@gmail.com>",
     "license": "MIT",
@@ -33,8 +33,7 @@
         "test": "vitest",
         "build": "tsup",
         "dev": "tsup --watch",
-        "prepublishOnly": "npm run build",
-        "make:version": "npm version --no-git-tag-version"
+        "prepublishOnly": "npm run build"
     },
     "dependencies": {
         "@language-kit/lexer": "^1.1.6"
