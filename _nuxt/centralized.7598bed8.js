@@ -1,0 +1,1 @@
+import{i as t,K as l,o as s}from"./entry.d8b577fd.js";const c={class:"lk-h-[calc(100vh-64px-100px)] lk-text-center lk-flex lk-items-center lk-justify-center"},o={__name:"centralized",setup(r){return(e,a)=>(s(),t("div",c,[l(e.$slots,"default")]))}};export{o as default};
