@@ -24,10 +24,6 @@ export class BaseLineNode extends BaseNode {
     public sharedMethod() {
         // code
     }
-
-    public isFirstLine(): this is FirstLineNode {
-        return this.type === 'FirstLine'
-    }
 }
 
 export class FirstLineNode extends BaseLineNode {
@@ -92,7 +88,17 @@ import { BaseLineNode } from './LineNode'
 import { LineProcessor } from './LineProcessor'
 
 export class LineParser extends BaseParser<BaseLineNode> {
-    public processors = [LineProcessor]
+     constructor() {
+        super()
+
+        this.setProcessors([
+            LineProcessor
+        ])
+    }
+
+    public onUnhandledToken: BaseParser['onUnhandledToken'] = (token) => {
+        console.error('unhandled token', token)
+    }
 }
 
 ```
@@ -104,6 +110,7 @@ Now we can parse any string and have an the output desired
 ```ts
 // Sample.ts
 import { LineParser } from './LineParser'
+import { FirstLineNode } from './line-node'
 
 const parser = new LineParser()
 
@@ -113,7 +120,7 @@ const [firstLine, normalLine] = parser.toNodes(payload) // result [FirstLineNode
 
 normalLine.sharedMethod()
 
-if (firstLine.isFirstLine()) {
+if (firstLine instanceof FirstLineNode) {
     firstLine.customMethodForFirstLineOnly()
 }
 
