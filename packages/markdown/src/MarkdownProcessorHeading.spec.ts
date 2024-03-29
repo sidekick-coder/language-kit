@@ -3,7 +3,7 @@ import { MarkdownParser } from './MarkdownParser'
 import { MarkdownProcessorHeading } from './MarkdownProcessorHeading'
 import { MarkdownNodeHeading } from './MarkdownNodeHeading'
 
-describe('MarkdownProcessorHeading', () => {
+describe.only('MarkdownProcessorHeading', () => {
     it('should transform text in node heading', () => {
         const parser = new MarkdownParser([MarkdownProcessorHeading])
 
@@ -14,11 +14,13 @@ describe('MarkdownProcessorHeading', () => {
         const node = new MarkdownNodeHeading()
 
         node.start = 0
-        node.end = -1 // -1 for EOF
+        node.end = payload.length - 1
         node.level = 1
         node.body = 'Hello world'
 
-        node.tokens = parser.toTokens(payload)
+        node.tokens = parser.toTokens(payload, {
+            includeEndOfFileToken: false,
+        })
 
         expect(result).toHaveLength(1)
 

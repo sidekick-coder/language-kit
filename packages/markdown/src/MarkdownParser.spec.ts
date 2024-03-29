@@ -5,6 +5,7 @@ import { MarkdownNodeArray } from './MarkdownNodeArray'
 import { MarkdownParser } from '.'
 import { MarkdownNodeHeading } from './MarkdownNodeHeading'
 import { MarkdownNodeParagraph } from './MarkdownNodeParagraph'
+import { MarkdownNodeBreakLine } from './MarkdownNodeBreakLine'
 
 describe('MarkdownParser', () => {
     it('should parse markdown in nodes', () => {
@@ -14,12 +15,17 @@ describe('MarkdownParser', () => {
 
         const nodes = parser.toNodes(payload)
 
-        const heading = nodes[0] as MarkdownNodeHeading
-        const paragraphWithBold = nodes[1] as MarkdownNodeParagraph
-        const paragraphWithNormalText = nodes[2] as MarkdownNodeParagraph
+        const [heading, _breakLine1, paragraphWithBold, _breakLine2, paragraphWithNormalText] =
+            nodes as any[] as [
+                MarkdownNodeHeading,
+                MarkdownNodeBreakLine,
+                MarkdownNodeParagraph,
+                MarkdownNodeBreakLine,
+                MarkdownNodeParagraph
+            ]
 
         expect(nodes).toBeInstanceOf(MarkdownNodeArray)
-        expect(nodes).toHaveLength(3)
+        expect(nodes).toHaveLength(5)
 
         expect(heading).toBeInstanceOf(MarkdownNodeHeading)
         expect(paragraphWithBold).toBeInstanceOf(MarkdownNodeParagraph)
@@ -41,11 +47,13 @@ describe('MarkdownParser', () => {
 
         const html = nodes.toHtml()
 
-        expect(html).toBe('<h1>Heading</h1><p><strong>Bold text</strong></p><p>NormalText</p>')
+        expect(html).toBe(
+            '<h1>Heading</h1><br><p><strong>Bold text</strong></p><br><p>NormalText</p>'
+        )
     })
 
     it('should transform nodes with symbols in html', () => {
-        const payload = ['# Heading @123 ', '**Hello {{crazy}}**', 'Normal Text with #hello'].join(
+        const payload = ['# Heading @123 ', '**Hello {{name}}**', 'Normal Text with #hello'].join(
             '\n'
         )
 
@@ -56,7 +64,7 @@ describe('MarkdownParser', () => {
         const html = nodes.toHtml()
 
         expect(html).toBe(
-            '<h1>Heading @123</h1><p><strong>Hello {{crazy}}</strong></p><p>Normal Text with #hello</p>'
+            '<h1>Heading @123 </h1><br><p><strong>Hello {{name}}</strong></p><br><p>Normal Text with #hello</p>'
         )
     })
 })

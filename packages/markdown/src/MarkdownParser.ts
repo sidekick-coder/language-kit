@@ -3,11 +3,13 @@ import { MarkdownNode } from './MarkdownNode'
 import { MarkdownProcessorParagraph } from './MarkdownProcessorParagraph'
 import { MarkdownProcessorHeading } from './MarkdownProcessorHeading'
 import { MarkdownProcessorComponent } from './MarkdownProcessorComponent'
-import { MarkdownProcessor } from './MarkdownProcessor'
 import { MarkdownNodeArray } from './MarkdownNodeArray'
 import { MarkdownProcessorText } from './MarkdownProcessorText'
 import { MarkdownProcessorTextBold } from './MarkdownProcessorTextBold'
 import { MarkdownProcessorTextWithAttrs } from './MarkdownProcessorTextWithAttrs'
+import { MarkdownProcessorBreakLine } from './MarkdownProcessorBreakLine'
+import { Token } from '@language-kit/lexer'
+import { MarkdownProcessorEOF } from './MarkdownProcessorEOF'
 
 export const Processors: Record<string, BaseProcessorConstructor> = {
     Paragraph: MarkdownProcessorParagraph,
@@ -16,6 +18,8 @@ export const Processors: Record<string, BaseProcessorConstructor> = {
     Text: MarkdownProcessorText,
     TextBold: MarkdownProcessorTextBold,
     TextWithAttrs: MarkdownProcessorTextWithAttrs,
+    BreakLine: MarkdownProcessorBreakLine,
+    EOF: MarkdownProcessorEOF,
 }
 
 export class MarkdownParser extends BaseParser<MarkdownNode> {
@@ -29,5 +33,9 @@ export class MarkdownParser extends BaseParser<MarkdownNode> {
         const nodes = super.toNodes(payload, options)
 
         return new MarkdownNodeArray(...nodes)
+    }
+
+    public onUnhandledToken(token: Token) {
+        console.error('Unhandled token:', token)
     }
 }

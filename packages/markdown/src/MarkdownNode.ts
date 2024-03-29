@@ -14,6 +14,7 @@ export enum MarkdownNodeType {
     TextBold = 'TextBold',
     TextWithAttrs = 'TextWithAttrs',
     Text = 'Text',
+    BreakLine = 'BreakLine',
 }
 
 export type MarkdownNodeTypeName = keyof typeof MarkdownNodeType

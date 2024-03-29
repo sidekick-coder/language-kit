@@ -6,11 +6,17 @@ import { MarkdownProcessorTextBold } from './MarkdownProcessorTextBold'
 import { MarkdownNodeText } from './MarkdownNodeText'
 import { MarkdownNodeTextBold } from './MarkdownNodeTextBold'
 import { MarkdownProcessorText } from './MarkdownProcessorText'
+import { MarkdownProcessorEOF } from './MarkdownProcessorEOF'
 
 describe('MarkdownProcessorParagraph', () => {
-    it('should transform text in node paragraph', () => {
-        const parser = new MarkdownParser([MarkdownProcessorParagraph])
+    const parser = new MarkdownParser([
+        MarkdownProcessorParagraph,
+        MarkdownProcessorTextBold,
+        MarkdownProcessorText,
+        MarkdownProcessorEOF,
+    ])
 
+    it('should transform text in node paragraph', () => {
         const payload = 'Hello world'
 
         const result = parser.toNodes(payload)
@@ -18,10 +24,17 @@ describe('MarkdownProcessorParagraph', () => {
         const node = new MarkdownNodeParagraph()
 
         node.start = 0
-        node.end = -1 // -1 for EOF
+        node.end = payload.length - 1
         node.body = payload
+        node.children = parser.toNodes(payload, {
+            processors: {
+                exclude: [MarkdownProcessorParagraph],
+            },
+        })
 
-        node.tokens = parser.toTokens(payload)
+        node.tokens = parser.toTokens(payload, {
+            includeEndOfFileToken: false,
+        })
 
         expect(result.length, 'Should return only one node').toBe(1)
 
@@ -29,13 +42,7 @@ describe('MarkdownProcessorParagraph', () => {
     })
 
     it('should process child nodes', () => {
-        const parser = new MarkdownParser([
-            MarkdownProcessorParagraph,
-            MarkdownProcessorTextBold,
-            MarkdownProcessorText,
-        ])
-
-        const payload = ['Hello **word**'].join('\n').trim()
+        const payload = 'Hello **word**'
 
         const result = parser.toNodes(payload)
 
@@ -67,6 +74,9 @@ describe('MarkdownProcessorParagraph', () => {
             includeEndOfFileToken: false,
         })
         bold.children = parser.toNodes('word', {
+            lexer: {
+                includeEndOfFileToken: false,
+            },
             processors: {
                 exclude: [MarkdownProcessorParagraph],
             },
@@ -75,8 +85,11 @@ describe('MarkdownProcessorParagraph', () => {
         bold.setPositions(bold.start)
 
         paragraph.start = 0
-        paragraph.end = -1 // -1 for EOF
-        paragraph.tokens = parser.toTokens(payload)
+        paragraph.end = 13
+        paragraph.tokens = parser.toTokens(payload, {
+            includeEndOfFileToken: false,
+        })
+
         paragraph.body = payload
 
         paragraph.children.push(text, space, bold)
