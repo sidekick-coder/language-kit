@@ -1,5 +1,4 @@
 import { BaseNode } from '@language-kit/core'
-import { MarkdownNodeComponent } from './MarkdownNodeComponent'
 import { MarkdownNodeText } from './MarkdownNodeText'
 import { MarkdownNodeTextBold } from './MarkdownNodeTextBold'
 import { MarkdownNodeParagraph } from './MarkdownNodeParagraph'
@@ -23,7 +22,6 @@ interface InstancesTypesByEnum {
     [MarkdownNodeType.Unknown]: MarkdownNode
     [MarkdownNodeType.Paragraph]: MarkdownNodeParagraph
     [MarkdownNodeType.Heading]: MarkdownNodeHeading
-    [MarkdownNodeType.Component]: MarkdownNodeComponent
     [MarkdownNodeType.Text]: MarkdownNodeText
     [MarkdownNodeType.TextBold]: MarkdownNodeTextBold
     [MarkdownNodeType.TextWithAttrs]: MarkdownNodeTextWithAttrs

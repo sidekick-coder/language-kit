@@ -2,7 +2,6 @@ import { BaseParser, BaseProcessorConstructor, ToNodeOptions } from '@language-k
 import { MarkdownNode } from './MarkdownNode'
 import { MarkdownProcessorParagraph } from './MarkdownProcessorParagraph'
 import { MarkdownProcessorHeading } from './MarkdownProcessorHeading'
-import { MarkdownProcessorComponent } from './MarkdownProcessorComponent'
 import { MarkdownNodeArray } from './MarkdownNodeArray'
 import { MarkdownProcessorText } from './MarkdownProcessorText'
 import { MarkdownProcessorTextBold } from './MarkdownProcessorTextBold'
@@ -14,7 +13,6 @@ import { MarkdownProcessorEOF } from './MarkdownProcessorEOF'
 export const Processors: Record<string, BaseProcessorConstructor> = {
     Paragraph: MarkdownProcessorParagraph,
     Heading: MarkdownProcessorHeading,
-    Component: MarkdownProcessorComponent,
     Text: MarkdownProcessorText,
     TextBold: MarkdownProcessorTextBold,
     TextWithAttrs: MarkdownProcessorTextWithAttrs,
